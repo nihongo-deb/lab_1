@@ -10,6 +10,9 @@ import java.io.IOException;
  */
 public class App {
     public static void main(String[] args) throws IOException {
-
+        ImageNegativeCompression imageNegativeCompression = new ImageNegativeCompression();
+        imageNegativeCompression.readeImageFromResources("not-square-gervant.jpg");
+        imageNegativeCompression.setNegative();
+        imageNegativeCompression.saveImage("neg-not-square-gervant");
     }
 }
