@@ -2,7 +2,9 @@ package com.nihongo_deb;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.util.Scanner;
 
 /**
  * Hello world!
@@ -10,9 +12,12 @@ import java.io.IOException;
  */
 public class App {
     public static void main(String[] args) throws IOException {
-        ImageNegativeCompression imageNegativeCompression = new ImageNegativeCompression();
-        imageNegativeCompression.readeImageFromResources("not-square-gervant.jpg");
-        imageNegativeCompression.setNegative();
-        imageNegativeCompression.saveImage("neg-not-square-gervant");
+        ImageCompression imageCompression = new ImageCompression();
+        imageCompression.readeImageFromResources("gervant.jpg");
+        imageCompression.setNegative();
+        imageCompression.saveImage("test");
+
+        ImageIO.write(imageCompression.getImageConversionIterations().get(0), "jpg", new File("parent-test.jpg"));
+
     }
 }
