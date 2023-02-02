@@ -1,23 +1,20 @@
 package com.nihongo_deb;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.Scanner;
+import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.annotations.Benchmark;
 
-/**
- * Hello world!
- *
- */
+import java.io.IOException;
+
 public class App {
-    public static void main(String[] args) throws IOException {
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @Warmup(iterations = 3)
+    @Fork(value = 1)
+    @Measurement(iterations = 3)
+    public void main() throws IOException {
         ImageCompression imageCompression = new ImageCompression();
         imageCompression.readeImageFromResources("gervant.jpg");
-        imageCompression.setNegative();
-        imageCompression.saveImage("test");
-
-        ImageIO.write(imageCompression.getImageConversionIterations().get(0), "jpg", new File("parent-test.jpg"));
-
+        imageCompression.applyConvolutionMatrix();
+        imageCompression.saveImage("gervant-convoluted");
     }
 }
