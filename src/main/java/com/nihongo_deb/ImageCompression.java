@@ -1,5 +1,7 @@
 package com.nihongo_deb;
 
+import org.openjdk.jmh.annotations.Benchmark;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
@@ -15,6 +17,7 @@ import java.util.List;
  * @project lab_1
  * @created 28.01.2023
  */
+
 public class ImageCompression {
     private String fileExtension;
     private static int[][] convolutionMatrix = new int [3][3];
@@ -24,17 +27,17 @@ public class ImageCompression {
         -1  5 -1
          0 -1  0
         */
-        convolutionMatrix[0][0] = -1;
+        convolutionMatrix[0][0] = 0;
         convolutionMatrix[0][1] = -1;
-        convolutionMatrix[0][2] = -1;
+        convolutionMatrix[0][2] = 0;
 
         convolutionMatrix[1][0] = -1;
-        convolutionMatrix[1][1] = 9;
+        convolutionMatrix[1][1] = 5;
         convolutionMatrix[1][2] = -1;
 
-        convolutionMatrix[2][0] = -1;
+        convolutionMatrix[2][0] = 0;
         convolutionMatrix[2][1] = -1;
-        convolutionMatrix[2][2] = -1;
+        convolutionMatrix[2][2] = 0;
     }
 
     private List<BufferedImage> imageConversionIterations = new LinkedList<>();
