@@ -20,6 +20,7 @@ import java.util.List;
 
 public class ImageCompression {
     private String fileExtension;
+    private List<BufferedImage> imageConversionIterations = new LinkedList<>();
     private static int[][] convolutionMatrix = new int [3][3];
     static {
         /*
@@ -40,7 +41,13 @@ public class ImageCompression {
         convolutionMatrix[2][2] = 0;
     }
 
-    private List<BufferedImage> imageConversionIterations = new LinkedList<>();
+    public ImageCompression(){}
+
+    public ImageCompression(String fileName, boolean isFromResources){
+        if (isFromResources)
+            readeImageFromResources(fileName);
+        else readImageFromAbsoluteFilePath(fileName);
+    }
 
     public void readeImageFromResources(String name) {
         ClassLoader classLoader = this.getClass().getClassLoader();
@@ -62,13 +69,12 @@ public class ImageCompression {
             this.fileExtension = getExtensionOfFileByName(absoluteImageFilePath);
 
             BufferedImage bufferedImage = ImageIO.read(file);
+            imageConversionIterations.clear();
             imageConversionIterations.add(bufferedImage);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-
-
 
     public void saveImage(String newFileName) throws IOException {
         ImageIO.write(imageConversionIterations.get(imageConversionIterations.size() - 1), this.fileExtension, new File(newFileName + '.' + this.fileExtension));
