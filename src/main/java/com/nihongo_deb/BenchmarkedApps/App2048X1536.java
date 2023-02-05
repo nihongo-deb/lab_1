@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class App2048X1536 {
     private static final ImageCompression imageCompression = new ImageCompression();
     {
-        imageCompression.readeImageFromResources("gervant_2048x1536.jpg");
+        imageCompression.readeImageFromResources("gervant_2048×1536.jpg");
     }
 
     @Benchmark

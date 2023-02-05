@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 public class App1280X960 {
     private static final ImageCompression imageCompression = new ImageCompression();
     {
-        imageCompression.readeImageFromResources("gervant_1280x960.jpg");
+        imageCompression.readeImageFromResources("gervant_1280×960.jpg");
     }
 
     @Benchmark

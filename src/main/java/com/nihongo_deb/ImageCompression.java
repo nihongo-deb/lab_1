@@ -1,7 +1,5 @@
 package com.nihongo_deb;
 
-import org.openjdk.jmh.annotations.Benchmark;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
@@ -19,8 +17,11 @@ import java.util.List;
  */
 
 public class ImageCompression {
+    /** переменная, в которой будет храниться расширение изображения-родителя */
     private String fileExtension;
+    /** двусвязанный список, в котором храниться буфер каждого изменения изображения*/
     private List<BufferedImage> imageConversionIterations = new LinkedList<>();
+     /** метрица-ядро преобразования (увеличение контраста) */
     private static int[][] convolutionMatrix = new int [3][3];
     static {
         /*
@@ -43,12 +44,26 @@ public class ImageCompression {
 
     public ImageCompression(){}
 
+    /**
+     * Конструктор с загрузкой изображения
+     * @param fileName имя файла, который требуется загрузить
+     * @param isFromResources вид получения изображения <br/>
+     * <ul>
+     *      <li> true - изображение будет взято по имени из resouces.
+     *      <li> false - изображение будет взято по абсолютному пути.
+     * </ul>
+     */
     public ImageCompression(String fileName, boolean isFromResources){
         if (isFromResources)
             readeImageFromResources(fileName);
         else readImageFromAbsoluteFilePath(fileName);
     }
 
+    /**
+     * Метод для загрузки изображение из resources
+     * Перед загрузкой {@link ImageCompression#imageConversionIterations} будет предварительно отчищен
+     * @param name имя файла, который требуется загрузить
+     */
     public void readeImageFromResources(String name) {
         ClassLoader classLoader = this.getClass().getClassLoader();
         try (InputStream io = classLoader.getResourceAsStream(name)){
@@ -62,7 +77,11 @@ public class ImageCompression {
             throw new RuntimeException(e);
         }
     }
-
+    /**
+     * Метод для загрузки изображение по абсолютному пути <br/>
+     * Перед загрузкой {@link ImageCompression#imageConversionIterations} будет предварительно отчищен
+     * @param absoluteImageFilePath путь до файла, который требуется загрузить
+     */
     public void readImageFromAbsoluteFilePath(String absoluteImageFilePath){
         File file = new File(absoluteImageFilePath);
         try {
@@ -76,15 +95,35 @@ public class ImageCompression {
         }
     }
 
+    /**
+     * Метод для сохранения изображения. <br/>
+     * Сохраняет последнее изменение (последний элемент из {@link ImageCompression#imageConversionIterations})<br/>
+     *
+     * @param newFileName путь до файла, который требуется загрузить
+     */
     public void saveImage(String newFileName) throws IOException {
         ImageIO.write(imageConversionIterations.get(imageConversionIterations.size() - 1), this.fileExtension, new File(newFileName + '.' + this.fileExtension));
     }
 
+    /**
+     * Метод для сохранения изображения. <br/>
+     * Сохраняет последнее изменение (последний элемент из {@link ImageCompression#imageConversionIterations}). <br/>
+     * Расширение файла родительское.
+     * @param newFileName путь до файла, который требуется загрузить
+     * @param extension расширение сохраняемого изображения
+     */
     public void saveImage(String newFileName, String extension) throws IOException {
         BufferedImage lastConversionBufferedImage = imageConversionIterations.get(imageConversionIterations.size() - 1);
         ImageIO.write(lastConversionBufferedImage, extension, new File(newFileName + extension));
     }
 
+    /**
+     * Метод для инвертирования изображения <br/>
+     * При этом родительское изображение или последний буфер изображения в
+     * {@link ImageCompression#imageConversionIterations} не изменяется
+     * <br/>
+     * После инвертирования новый буфер добавляется в {@link ImageCompression#imageConversionIterations}
+     */
     public void applyNegative() {
         BufferedImage newConvertedBufferedImage;
         if (imageConversionIterations.isEmpty()){
@@ -108,6 +147,13 @@ public class ImageCompression {
         }
     }
 
+    /**
+     * Метод для свёртки изображения <br/>
+     * При этом родительское изображение или последний буфер изображения в
+     * {@link ImageCompression#imageConversionIterations} не изменяется
+     * <br/>
+     * После инвертирования новый буфер добавляется в {@link ImageCompression#imageConversionIterations}
+     */
     public void applyConvolutionMatrix(){
         // копируем старое изображение, теперь это будущее новое изображение
         BufferedImage newBufferedImage = deepCopy(imageConversionIterations.get(imageConversionIterations.size() - 1));
@@ -161,14 +207,26 @@ public class ImageCompression {
         imageConversionIterations.add(newBufferedImage);
     }
 
+    /**
+     * Геттер {@link ImageCompression#imageConversionIterations}
+     */
     public List<BufferedImage> getImageConversionIterations() {
         return imageConversionIterations;
     }
 
+    /**
+     * Сеттер {@link ImageCompression#imageConversionIterations}
+     */
     public void setImageConversionIterations(List<BufferedImage> imageConversionIterations) {
         this.imageConversionIterations = imageConversionIterations;
     }
 
+    /**
+     * Приватный метод для клонирования объекта класса {@link BufferedImage}
+     *
+     * @param bi объект, который нужно склонировать
+     * @return копию входного объекта
+     */
     private static BufferedImage deepCopy(BufferedImage bi) {
         final ColorModel cm = bi.getColorModel();
         final boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
@@ -176,6 +234,12 @@ public class ImageCompression {
         return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
     }
 
+    /**
+     * Приватный метод для получения расширения изображения-родителя
+     *
+     * @param fileName название файла, включающее родителя
+     * @return String - расширение файла родителя
+     */
     private String getExtensionOfFileByName(String fileName){
         String extension = null;
 

@@ -15,7 +15,6 @@ import java.util.concurrent.TimeUnit;
 @State(Scope.Benchmark)
 public class App1024X768 {
     private static final ImageCompression imageCompression = new ImageCompression();
-    private static long iterations = 0l;
     {
         imageCompression.readeImageFromResources("gervant_1024×768.jpg");
     }
@@ -29,12 +28,10 @@ public class App1024X768 {
     public void convertImage(){
         imageCompression.applyNegative();
         imageCompression.applyConvolutionMatrix();
-        iterations++;
     }
 
     @TearDown
     public void save() throws IOException {
         imageCompression.saveImage("conv-gervant_1024×768");
-        System.out.println("TearDown:\t iters = " + iterations);
     }
 }
