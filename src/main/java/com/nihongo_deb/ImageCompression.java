@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @author KAWAIISHY
@@ -129,22 +131,32 @@ public class ImageCompression {
         if (imageConversionIterations.isEmpty()){
             throw new NullPointerException("load file correctly");
         } else {
-            newConvertedBufferedImage = deepCopy(imageConversionIterations.get(imageConversionIterations.size() - 1));
-            WritableRaster writableRaster = newConvertedBufferedImage.getRaster();
-
-            for (int x = 0; x < writableRaster.getWidth(); x++){
-                for (int y = 0; y < writableRaster.getHeight(); y++){
-                    int[] pixel = writableRaster.getPixel(x, y, new int[4]);
-                    for (int RGBIndex = 0; RGBIndex < pixel.length - 1; RGBIndex++){
-                        pixel[RGBIndex] = 255 - pixel[RGBIndex];
-                    }
-                    writableRaster.setPixel(x, y, pixel);
-                }
-            }
-
-            newConvertedBufferedImage.setData(writableRaster);
+            newConvertedBufferedImage = getNegativeImage(imageConversionIterations.get(imageConversionIterations.size() - 1));
             this.imageConversionIterations.add(newConvertedBufferedImage);
         }
+    }
+
+    public BufferedImage getNegativeImage(BufferedImage image){
+        BufferedImage negativeImage = deepCopy(image);
+        WritableRaster writableRaster = negativeImage.getRaster();
+
+        for (int x = 0; x < writableRaster.getWidth(); x++){
+            for (int y = 0; y < writableRaster.getHeight(); y++){
+                int[] pixel = writableRaster.getPixel(x, y, new int[4]);
+                for (int RGBIndex = 0; RGBIndex < pixel.length - 1; RGBIndex++){
+                    pixel[RGBIndex] = 255 - pixel[RGBIndex];
+                }
+                writableRaster.setPixel(x, y, pixel);
+            }
+        }
+
+        negativeImage.setData(writableRaster);
+        return negativeImage;
+    }
+
+    public void applyNegativeMultithreading(int threadsNum){
+        ExecutorService executorService = Executors.newFixedThreadPool(threadsNum);
+
     }
 
     /**
@@ -250,5 +262,38 @@ public class ImageCompression {
             throw new NullPointerException("File don't have extension");
 
         return extension;
+    }
+    
+    private BufferedImage convertImage(BufferedImage bufferedImage, ConversionType conversionType){
+        switch (conversionType){
+            case NEGATIVE -> {
+                return getNegativeImage(bufferedImage);
+            }
+            case CONVOLUTION_MATRIX -> {
+                // TODO 11.02.2023 дописать логику получения конвертированного изображения после применения матрицы
+                return null;
+            }
+            default -> {
+                return null;
+            }
+        }
+    }
+
+    private enum ConversionType {
+        NEGATIVE, CONVOLUTION_MATRIX
+    }
+    
+    private class ImagePart implements Runnable{
+        BufferedImage partBufferedImage;
+        WritableRaster partWritableRaster;
+
+        public ImagePart(BufferedImage parentBufferedImage, ConversionType conversionType, int fromY, int toY){
+            this.partBufferedImage = deepCopy(parentBufferedImage);
+        }
+
+        @Override
+        public void run() {
+
+        }
     }
 }
