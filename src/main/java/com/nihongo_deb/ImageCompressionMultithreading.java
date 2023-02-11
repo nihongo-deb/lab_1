@@ -9,21 +9,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 /**
  * @author KAWAIISHY
  * @project lab_1
- * @created 28.01.2023
+ * @created 12.02.2023
  */
 
-public class ImageCompression {
+public class ImageCompressionMultithreading {
     /** переменная, в которой будет храниться расширение изображения-родителя */
     private String fileExtension;
     /** двусвязанный список, в котором храниться буфер каждого изменения изображения*/
-    private List<BufferedImage> imageConversionIterations = new LinkedList<>();
-     /** метрица-ядро преобразования (увеличение контраста) */
+    private volatile List<BufferedImage> imageConversionIterations = new LinkedList<>();
+    /** метрица-ядро преобразования (увеличение контраста) */
     private static int[][] convolutionMatrix = new int [3][3];
     static {
         /*
@@ -44,7 +43,7 @@ public class ImageCompression {
         convolutionMatrix[2][2] = 0;
     }
 
-    public ImageCompression(){}
+    public ImageCompressionMultithreading(){}
 
     /**
      * Конструктор с загрузкой изображения
@@ -55,7 +54,7 @@ public class ImageCompression {
      *      <li> false - изображение будет взято по абсолютному пути.
      * </ul>
      */
-    public ImageCompression(String fileName, boolean isFromResources){
+    public ImageCompressionMultithreading(String fileName, boolean isFromResources){
         if (isFromResources)
             readeImageFromResources(fileName);
         else readImageFromAbsoluteFilePath(fileName);
@@ -63,7 +62,7 @@ public class ImageCompression {
 
     /**
      * Метод для загрузки изображение из resources
-     * Перед загрузкой {@link ImageCompression#imageConversionIterations} будет предварительно отчищен
+     * Перед загрузкой {@link ImageCompressionMultithreading#imageConversionIterations} будет предварительно отчищен
      * @param name имя файла, который требуется загрузить
      */
     public void readeImageFromResources(String name) {
@@ -81,7 +80,7 @@ public class ImageCompression {
     }
     /**
      * Метод для загрузки изображение по абсолютному пути <br/>
-     * Перед загрузкой {@link ImageCompression#imageConversionIterations} будет предварительно отчищен
+     * Перед загрузкой {@link ImageCompressionMultithreading#imageConversionIterations} будет предварительно отчищен
      * @param absoluteImageFilePath путь до файла, который требуется загрузить
      */
     public void readImageFromAbsoluteFilePath(String absoluteImageFilePath){
@@ -99,7 +98,7 @@ public class ImageCompression {
 
     /**
      * Метод для сохранения изображения. <br/>
-     * Сохраняет последнее изменение (последний элемент из {@link ImageCompression#imageConversionIterations})<br/>
+     * Сохраняет последнее изменение (последний элемент из {@link ImageCompressionMultithreading#imageConversionIterations})<br/>
      *
      * @param newFileName путь до файла, который требуется загрузить
      */
@@ -109,7 +108,7 @@ public class ImageCompression {
 
     /**
      * Метод для сохранения изображения. <br/>
-     * Сохраняет последнее изменение (последний элемент из {@link ImageCompression#imageConversionIterations}). <br/>
+     * Сохраняет последнее изменение (последний элемент из {@link ImageCompressionMultithreading#imageConversionIterations}). <br/>
      * Расширение файла родительское.
      * @param newFileName путь до файла, который требуется загрузить
      * @param extension расширение сохраняемого изображения
@@ -122,9 +121,9 @@ public class ImageCompression {
     /**
      * Метод для инвертирования изображения <br/>
      * При этом родительское изображение или последний буфер изображения в
-     * {@link ImageCompression#imageConversionIterations} не изменяется
+     * {@link ImageCompressionMultithreading#imageConversionIterations} не изменяется
      * <br/>
-     * После инвертирования новый буфер добавляется в {@link ImageCompression#imageConversionIterations}
+     * После инвертирования новый буфер добавляется в {@link ImageCompressionMultithreading#imageConversionIterations}
      */
     public void applyNegative() {
         BufferedImage newConvertedBufferedImage;
@@ -154,12 +153,49 @@ public class ImageCompression {
         return negativeImage;
     }
 
+    public BufferedImage[] applyNegativeMultithreading(int threadsNum) throws InterruptedException, ExecutionException {
+        ExecutorService executorService = Executors.newFixedThreadPool(threadsNum);
+        BufferedImage [] parentPartsImages = getSubimages(imageConversionIterations.get(0), threadsNum);
+        BufferedImage [] negPartsImages = deepCopy(parentPartsImages);
+        Future<BufferedImage> [] futures = new Future[threadsNum];
+
+        for (int i = 0; i < threadsNum; i++)
+            futures[i] = executorService.submit(new PartImageRunner(negPartsImages[i]));
+
+        executorService.shutdown();
+        System.out.println("Tasks submitted");
+
+        executorService.awaitTermination(1, TimeUnit.HOURS);
+        System.out.println("Join");
+
+        for (int i = 0; i < threadsNum; i++)
+            negPartsImages[i] = futures[i].get();
+
+        return negPartsImages;
+    }
+
+    private BufferedImage [] getSubimages(BufferedImage parentImage, int numSubimages){
+        BufferedImage [] parentPartsImages = new BufferedImage[numSubimages];
+
+        final BufferedImage parent = parentImage;
+
+        int widthDelta = parentImage.getWidth() / numSubimages;
+        int unexpectedPixelRows = parentImage.getWidth() % numSubimages;
+
+        for (int i = 0; i < numSubimages - 1; i++){
+            parentPartsImages[i] = parent.getSubimage(i * widthDelta, 0, widthDelta, parent.getHeight());
+        }
+        parentPartsImages[parentPartsImages.length - 1] = parent.getSubimage((numSubimages - 1) * widthDelta, 0, widthDelta + unexpectedPixelRows, parent.getHeight());
+
+        return parentPartsImages;
+    }
+
     /**
      * Метод для свёртки изображения <br/>
      * При этом родительское изображение или последний буфер изображения в
-     * {@link ImageCompression#imageConversionIterations} не изменяется
+     * {@link ImageCompressionMultithreading#imageConversionIterations} не изменяется
      * <br/>
-     * После инвертирования новый буфер добавляется в {@link ImageCompression#imageConversionIterations}
+     * После инвертирования новый буфер добавляется в {@link ImageCompressionMultithreading#imageConversionIterations}
      */
     public void applyConvolutionMatrix(){
         // копируем старое изображение, теперь это будущее новое изображение
@@ -215,14 +251,14 @@ public class ImageCompression {
     }
 
     /**
-     * Геттер {@link ImageCompression#imageConversionIterations}
+     * Геттер {@link ImageCompressionMultithreading#imageConversionIterations}
      */
     public List<BufferedImage> getImageConversionIterations() {
         return imageConversionIterations;
     }
 
     /**
-     * Сеттер {@link ImageCompression#imageConversionIterations}
+     * Сеттер {@link ImageCompressionMultithreading#imageConversionIterations}
      */
     public void setImageConversionIterations(List<BufferedImage> imageConversionIterations) {
         this.imageConversionIterations = imageConversionIterations;
@@ -241,6 +277,17 @@ public class ImageCompression {
         return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
     }
 
+    private static BufferedImage[] deepCopy(BufferedImage [] bi){
+        BufferedImage [] copedBufferedImages = new BufferedImage[bi.length];
+        for (int i = 0; i < bi.length; i++){
+            final ColorModel cm = bi[i].getColorModel();
+            final boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+            final WritableRaster raster = bi[i].copyData(bi[i].getRaster().createCompatibleWritableRaster());
+            copedBufferedImages[i] = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+        }
+        return copedBufferedImages;
+    }
+
     /**
      * Приватный метод для получения расширения изображения-родителя
      *
@@ -257,5 +304,19 @@ public class ImageCompression {
             throw new NullPointerException("File don't have extension");
 
         return extension;
+    }
+
+    private class PartImageRunner implements Callable<BufferedImage> {
+        private BufferedImage partBufferedImage;
+
+        public PartImageRunner(BufferedImage partBufferedImage){
+            this.partBufferedImage = partBufferedImage;
+        }
+
+
+        @Override
+        public BufferedImage call() throws Exception {
+            return getNegativeImage(partBufferedImage);
+        }
     }
 }
