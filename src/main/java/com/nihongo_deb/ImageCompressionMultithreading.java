@@ -1,6 +1,7 @@
 package com.nihongo_deb;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
@@ -134,46 +135,79 @@ public class ImageCompressionMultithreading {
             this.imageConversionIterations.add(newConvertedBufferedImage);
         }
     }
-
+    /**
+     * Метод для инвертирования изображения <br/>
+     * <br/>
+     * @param image изображение, которое будет инвертировано
+     * @return инвертированное изображение
+     */
     public BufferedImage getNegativeImage(BufferedImage image){
+        // создаём копию изображение, которое будем инвертировать
         BufferedImage negativeImage = deepCopy(image);
+        // получает WritableRaster с этого изображения, для доступа к цветовым каналам
         WritableRaster writableRaster = negativeImage.getRaster();
 
+        // проходимся попиксельно по изображению
         for (int x = 0; x < writableRaster.getWidth(); x++){
             for (int y = 0; y < writableRaster.getHeight(); y++){
+                // получаем пиксель с координатами 'x' и 'y' и вид пикселя
+                // new int[4] => вид будет RGBA
                 int[] pixel = writableRaster.getPixel(x, y, new int[4]);
+                // цикл инвертирования пикселя (color_value = 255 - color_value)
                 for (int RGBIndex = 0; RGBIndex < pixel.length - 1; RGBIndex++){
                     pixel[RGBIndex] = 255 - pixel[RGBIndex];
                 }
+                // перезаписываем изменённый пиксель
                 writableRaster.setPixel(x, y, pixel);
             }
         }
-
+        // перезаписываем старый writableRaster на новый (с инвертированными пикселями)
         negativeImage.setData(writableRaster);
         return negativeImage;
     }
 
+    /**
+     * Метод для многопоточного инвертирования изображения <br/>
+     * <br/>
+     * @param threadsNum количество потоков, которое будет задействовано для инвертирования
+     * @return возвращает вертикальные куски изображения, кол-во кусков равно кол-ву задействованных потоков (threadsNum)
+     */
     public BufferedImage[] applyNegativeMultithreading(int threadsNum) throws InterruptedException, ExecutionException {
+        // пул потоков
         ExecutorService executorService = Executors.newFixedThreadPool(threadsNum);
-        BufferedImage [] parentPartsImages = getSubimages(imageConversionIterations.get(0), threadsNum);
-        BufferedImage [] negPartsImages = deepCopy(parentPartsImages);
+        // массив из кусков родительского изображения (последнего изображения в imageConversionIterations)
+        // данные куски будут инвертированы
+        BufferedImage [] negPartsImages = getSubimages(imageConversionIterations.get(0), threadsNum);
+        // массив объектов, для получения выходных параметров из потоков, порождённые master-потоком
+        // здесь будут храниться инвертированные изображения(куски) из negPartsImages
         Future<BufferedImage> [] futures = new Future[threadsNum];
 
+        // цикл для указания, куда следует записать потоку выходные значения после завершения
         for (int i = 0; i < threadsNum; i++)
             futures[i] = executorService.submit(new PartImageRunner(negPartsImages[i]));
 
+        // запуск потоков (fork)
         executorService.shutdown();
-        System.out.println("Tasks submitted");
-
+        // ожидание выполнения всех потоков (join)
         executorService.awaitTermination(1, TimeUnit.HOURS);
-        System.out.println("Join");
 
+        // перезаписываем массив изменёнными (инвертированными) изображениями
         for (int i = 0; i < threadsNum; i++)
             negPartsImages[i] = futures[i].get();
 
         return negPartsImages;
     }
 
+    /**
+     * Метод для разделения изображения на равные куски.
+     * Если длинна изображения не делится на нужно кол-во кусков без остатка,
+     * то остаток от деления будет прибавлен к последнему куску
+     * <br/>
+     * <br/>
+     * @param parentImage изображения, которое нужно поделить
+     * @param numSubimages требуемое кол-во кусков
+     * @return возвращает вертикальные куски изображения
+     */
     private BufferedImage [] getSubimages(BufferedImage parentImage, int numSubimages){
         BufferedImage [] parentPartsImages = new BufferedImage[numSubimages];
 
@@ -188,6 +222,33 @@ public class ImageCompressionMultithreading {
         parentPartsImages[parentPartsImages.length - 1] = parent.getSubimage((numSubimages - 1) * widthDelta, 0, widthDelta + unexpectedPixelRows, parent.getHeight());
 
         return parentPartsImages;
+    }
+
+    /**
+     * Метод для склейки изображения из кусков
+     * <br/>
+     * <br/>
+     * @param images изображения, которое нужно соединить
+     */
+    public void buildImageInPartsHorizontal(BufferedImage[] images){
+        BufferedImage result = null;
+        if (imageConversionIterations.get(imageConversionIterations.size() - 1) == null){
+            throw new NullPointerException("load file correctly");
+        } else {
+            result = new BufferedImage(
+                    imageConversionIterations.get(imageConversionIterations.size() - 1).getWidth(),
+                    imageConversionIterations.get(imageConversionIterations.size() - 1).getHeight(),
+                    imageConversionIterations.get(imageConversionIterations.size() - 1).getType()
+            );
+            Graphics2D graphics2D = result.createGraphics();
+            int x = 0;
+            for (BufferedImage image : images){
+                graphics2D.drawImage(image, x, 0, null);
+                x += image.getWidth();
+            }
+            graphics2D.dispose();
+        }
+        imageConversionIterations.add(result);
     }
 
     /**
@@ -306,6 +367,9 @@ public class ImageCompressionMultithreading {
         return extension;
     }
 
+    /**
+     * Класс, объекты которого будут переводить изображения в отдельном потоке и возвращать инвертированное изображение
+     */
     private class PartImageRunner implements Callable<BufferedImage> {
         private BufferedImage partBufferedImage;
 
@@ -313,9 +377,8 @@ public class ImageCompressionMultithreading {
             this.partBufferedImage = partBufferedImage;
         }
 
-
         @Override
-        public BufferedImage call() throws Exception {
+        public BufferedImage call() {
             return getNegativeImage(partBufferedImage);
         }
     }
