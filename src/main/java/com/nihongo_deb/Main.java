@@ -1,7 +1,5 @@
 package com.nihongo_deb;
 
-import com.nihongo_deb.BenchmarkedApps.App1024X768;
-
 import java.io.IOException;
 
 /**

@@ -140,8 +140,8 @@ public class ImageCompression {
         BufferedImage negativeImage = deepCopy(image);
         WritableRaster writableRaster = negativeImage.getRaster();
 
-        for (int x = 0; x < writableRaster.getWidth(); x++){
-            for (int y = 0; y < writableRaster.getHeight(); y++){
+        for (int y = 0; y < writableRaster.getHeight(); y++){
+            for (int x = 0; x < writableRaster.getWidth(); x++){
                 int[] pixel = writableRaster.getPixel(x, y, new int[4]);
                 for (int RGBIndex = 0; RGBIndex < pixel.length - 1; RGBIndex++){
                     pixel[RGBIndex] = 255 - pixel[RGBIndex];
@@ -173,15 +173,15 @@ public class ImageCompression {
         int width = parentWritableRaster.getWidth();
         int height = parentWritableRaster.getHeight();
         // пробегаемся по пикселям нового изображения учитывая обрезку в 1 пиксель по краям
-        for (int x = 1; x < width - 2; x++){
-            for (int y = 1; y < height - 2; y++){
+        for (int y = 1; y < height - 2; y++){
+            for (int x = 1; x < width - 2; x++){
                 // кусок пикселей из изображения-родителя,
                 // от куда мы будем брать исходные значения пикселей для перемножения
                 int[][][] partParentPixels = new int[3][3][4]; //[ширина][высота][RGBA]
                 // копируем значения пикселей в массив partParentPixels
                 // px/y - parent x/y
-                for (int px = 0; px < 3; px++){
-                    for (int py = 0; py < 3; py++){
+                for (int py = 0; py < 3; py++){
+                    for (int px = 0; px < 3; px++){
                         partParentPixels[px][py] = parentWritableRaster.getPixel(x - 1 + px, y - 1 + py, new int[4]);
                     }
                 }
@@ -191,8 +191,8 @@ public class ImageCompression {
                 // сумма перемножений матрицы(ядра) и куска родительского изображения
                 int multiplySum = 0;
                 for (int RGBIndex = 0; RGBIndex < 3; RGBIndex++) {
-                    for (int wMatrix = 0; wMatrix < convolutionMatrix.length; wMatrix++) {
-                        for (int hMatrix = 0; hMatrix < convolutionMatrix.length; hMatrix++) {
+                    for (int hMatrix = 0; hMatrix < convolutionMatrix.length; hMatrix++) {
+                        for (int wMatrix = 0; wMatrix < convolutionMatrix.length; wMatrix++) {
                             multiplySum += convolutionMatrix[wMatrix][hMatrix] * partParentPixels[wMatrix][hMatrix][RGBIndex];
                         }
                     }

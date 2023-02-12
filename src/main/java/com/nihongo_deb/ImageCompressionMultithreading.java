@@ -22,7 +22,7 @@ public class ImageCompressionMultithreading {
     /** переменная, в которой будет храниться расширение изображения-родителя */
     private String fileExtension;
     /** двусвязанный список, в котором храниться буфер каждого изменения изображения*/
-    private volatile List<BufferedImage> imageConversionIterations = new LinkedList<>();
+    private List<BufferedImage> imageConversionIterations = new LinkedList<>();
     /** метрица-ядро преобразования (увеличение контраста) */
     private static int[][] convolutionMatrix = new int [3][3];
     static {
@@ -126,13 +126,11 @@ public class ImageCompressionMultithreading {
      * <br/>
      * После инвертирования новый буфер добавляется в {@link ImageCompressionMultithreading#imageConversionIterations}
      */
-    public void applyNegative() {
-        BufferedImage newConvertedBufferedImage;
+    public void applyNegative(int threadsNum) throws ExecutionException, InterruptedException {
         if (imageConversionIterations.isEmpty()){
             throw new NullPointerException("load file correctly");
         } else {
-            newConvertedBufferedImage = getNegativeImage(imageConversionIterations.get(imageConversionIterations.size() - 1));
-            this.imageConversionIterations.add(newConvertedBufferedImage);
+            buildImageInPartsHorizontal(doNegativeMultithreading(threadsNum));
         }
     }
     /**
@@ -141,15 +139,15 @@ public class ImageCompressionMultithreading {
      * @param image изображение, которое будет инвертировано
      * @return инвертированное изображение
      */
-    public BufferedImage getNegativeImage(BufferedImage image){
+    private BufferedImage getNegativeImage(BufferedImage image){
         // создаём копию изображение, которое будем инвертировать
         BufferedImage negativeImage = deepCopy(image);
         // получает WritableRaster с этого изображения, для доступа к цветовым каналам
         WritableRaster writableRaster = negativeImage.getRaster();
 
         // проходимся попиксельно по изображению
-        for (int x = 0; x < writableRaster.getWidth(); x++){
-            for (int y = 0; y < writableRaster.getHeight(); y++){
+        for (int y = 0; y < writableRaster.getHeight(); y++){
+            for (int x = 0; x < writableRaster.getWidth(); x++){
                 // получаем пиксель с координатами 'x' и 'y' и вид пикселя
                 // new int[4] => вид будет RGBA
                 int[] pixel = writableRaster.getPixel(x, y, new int[4]);
@@ -172,15 +170,15 @@ public class ImageCompressionMultithreading {
      * @param threadsNum количество потоков, которое будет задействовано для инвертирования
      * @return возвращает вертикальные куски изображения, кол-во кусков равно кол-ву задействованных потоков (threadsNum)
      */
-    public BufferedImage[] applyNegativeMultithreading(int threadsNum) throws InterruptedException, ExecutionException {
+    private BufferedImage[] doNegativeMultithreading(int threadsNum) throws InterruptedException, ExecutionException {
         // пул потоков
         ExecutorService executorService = Executors.newFixedThreadPool(threadsNum);
         // массив из кусков родительского изображения (последнего изображения в imageConversionIterations)
         // данные куски будут инвертированы
-        BufferedImage [] negPartsImages = getSubimages(imageConversionIterations.get(0), threadsNum);
+        BufferedImage[] negPartsImages = getSubimages(imageConversionIterations.get(0), threadsNum);
         // массив объектов, для получения выходных параметров из потоков, порождённые master-потоком
         // здесь будут храниться инвертированные изображения(куски) из negPartsImages
-        Future<BufferedImage> [] futures = new Future[threadsNum];
+        Future<BufferedImage>[] futures = new Future[threadsNum];
 
         // цикл для указания, куда следует записать потоку выходные значения после завершения
         for (int i = 0; i < threadsNum; i++)
@@ -208,8 +206,8 @@ public class ImageCompressionMultithreading {
      * @param numSubimages требуемое кол-во кусков
      * @return возвращает вертикальные куски изображения
      */
-    private BufferedImage [] getSubimages(BufferedImage parentImage, int numSubimages){
-        BufferedImage [] parentPartsImages = new BufferedImage[numSubimages];
+    private BufferedImage[] getSubimages(BufferedImage parentImage, int numSubimages){
+        BufferedImage[] parentPartsImages = new BufferedImage[numSubimages];
 
         final BufferedImage parent = parentImage;
 
@@ -230,7 +228,7 @@ public class ImageCompressionMultithreading {
      * <br/>
      * @param images изображения, которое нужно соединить
      */
-    public void buildImageInPartsHorizontal(BufferedImage[] images){
+    private void buildImageInPartsHorizontal(BufferedImage[] images){
         BufferedImage result = null;
         if (imageConversionIterations.get(imageConversionIterations.size() - 1) == null){
             throw new NullPointerException("load file correctly");
@@ -338,8 +336,8 @@ public class ImageCompressionMultithreading {
         return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
     }
 
-    private static BufferedImage[] deepCopy(BufferedImage [] bi){
-        BufferedImage [] copedBufferedImages = new BufferedImage[bi.length];
+    private static BufferedImage[] deepCopy(BufferedImage[] bi){
+        BufferedImage[] copedBufferedImages = new BufferedImage[bi.length];
         for (int i = 0; i < bi.length; i++){
             final ColorModel cm = bi[i].getColorModel();
             final boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
