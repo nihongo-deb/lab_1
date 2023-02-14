@@ -21,8 +21,9 @@ import java.util.concurrent.Executors;
 public class ImageCompression {
     /** переменная, в которой будет храниться расширение изображения-родителя */
     private String fileExtension;
-    /** двусвязанный список, в котором храниться буфер каждого изменения изображения*/
-    private List<BufferedImage> imageConversionIterations = new LinkedList<>();
+    /** загруженное изображение*/
+    private BufferedImage image;
+
      /** метрица-ядро преобразования (увеличение контраста) */
     private static int[][] convolutionMatrix = new int [3][3];
     static {
@@ -63,7 +64,7 @@ public class ImageCompression {
 
     /**
      * Метод для загрузки изображение из resources
-     * Перед загрузкой {@link ImageCompression#imageConversionIterations} будет предварительно отчищен
+     * Перед загрузкой {@link ImageCompression#image} будет предварительно отчищен
      * @param name имя файла, который требуется загрузить
      */
     public void readeImageFromResources(String name) {
@@ -72,26 +73,21 @@ public class ImageCompression {
             this.fileExtension = getExtensionOfFileByName(name);
 
             assert io != null;
-            BufferedImage bufferedImage = ImageIO.read(io);
-            imageConversionIterations.clear();
-            imageConversionIterations.add(bufferedImage);
+            this.image = ImageIO.read(io);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
     /**
      * Метод для загрузки изображение по абсолютному пути <br/>
-     * Перед загрузкой {@link ImageCompression#imageConversionIterations} будет предварительно отчищен
+     * Перед загрузкой {@link ImageCompression#image} будет предварительно отчищен
      * @param absoluteImageFilePath путь до файла, который требуется загрузить
      */
     public void readImageFromAbsoluteFilePath(String absoluteImageFilePath){
         File file = new File(absoluteImageFilePath);
         try {
             this.fileExtension = getExtensionOfFileByName(absoluteImageFilePath);
-
-            BufferedImage bufferedImage = ImageIO.read(file);
-            imageConversionIterations.clear();
-            imageConversionIterations.add(bufferedImage);
+            image = ImageIO.read(file);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -99,40 +95,38 @@ public class ImageCompression {
 
     /**
      * Метод для сохранения изображения. <br/>
-     * Сохраняет последнее изменение (последний элемент из {@link ImageCompression#imageConversionIterations})<br/>
+     * Сохраняет последнее изменение (последний элемент из {@link ImageCompression#image})<br/>
      *
      * @param newFileName путь до файла, который требуется загрузить
      */
     public void saveImage(String newFileName) throws IOException {
-        ImageIO.write(imageConversionIterations.get(imageConversionIterations.size() - 1), this.fileExtension, new File(newFileName + '.' + this.fileExtension));
+        ImageIO.write(image, this.fileExtension, new File(newFileName + '.' + this.fileExtension));
     }
 
     /**
      * Метод для сохранения изображения. <br/>
-     * Сохраняет последнее изменение (последний элемент из {@link ImageCompression#imageConversionIterations}). <br/>
+     * Сохраняет последнее изменение (последний элемент из {@link ImageCompression#image}). <br/>
      * Расширение файла родительское.
      * @param newFileName путь до файла, который требуется загрузить
      * @param extension расширение сохраняемого изображения
      */
     public void saveImage(String newFileName, String extension) throws IOException {
-        BufferedImage lastConversionBufferedImage = imageConversionIterations.get(imageConversionIterations.size() - 1);
-        ImageIO.write(lastConversionBufferedImage, extension, new File(newFileName + extension));
+        ImageIO.write(image, extension, new File(newFileName + extension));
     }
 
     /**
      * Метод для инвертирования изображения <br/>
      * При этом родительское изображение или последний буфер изображения в
-     * {@link ImageCompression#imageConversionIterations} не изменяется
+     * {@link ImageCompression#image} не изменяется
      * <br/>
-     * После инвертирования новый буфер добавляется в {@link ImageCompression#imageConversionIterations}
+     * После инвертирования новый буфер добавляется в {@link ImageCompression#image}
      */
     public void applyNegative() {
         BufferedImage newConvertedBufferedImage;
-        if (imageConversionIterations.isEmpty()){
+        if (image == null){
             throw new NullPointerException("load file correctly");
         } else {
-            newConvertedBufferedImage = getNegativeImage(imageConversionIterations.get(imageConversionIterations.size() - 1));
-            this.imageConversionIterations.add(newConvertedBufferedImage);
+            this.image = getNegativeImage(this.image);
         }
     }
 
@@ -157,17 +151,17 @@ public class ImageCompression {
     /**
      * Метод для свёртки изображения <br/>
      * При этом родительское изображение или последний буфер изображения в
-     * {@link ImageCompression#imageConversionIterations} не изменяется
+     * {@link ImageCompression#image} не изменяется
      * <br/>
-     * После инвертирования новый буфер добавляется в {@link ImageCompression#imageConversionIterations}
+     * После инвертирования новый буфер добавляется в {@link ImageCompression#image}
      */
     public void applyConvolutionMatrix(){
         // копируем старое изображение, теперь это будущее новое изображение
-        BufferedImage newBufferedImage = deepCopy(imageConversionIterations.get(imageConversionIterations.size() - 1));
+        BufferedImage newBufferedImage = deepCopy(this.image);
         // берем от будущего нового изображение WritableRaster (объект, в котором можно манипулировать пикселями изображения)
         WritableRaster newWritableRaster = newBufferedImage.getRaster();
         // берем WritableRaster от изображения-родителя (последнее изображение в LinkedList imageConversionIterations)
-        WritableRaster parentWritableRaster = imageConversionIterations.get(imageConversionIterations.size() - 1).getRaster();
+        WritableRaster parentWritableRaster = this.image.getRaster();
 
         // записываем пиксели изображения
         int width = parentWritableRaster.getWidth();
@@ -211,21 +205,21 @@ public class ImageCompression {
         // присваиваем все сконвертированные пиксели изображению
         newBufferedImage.setData(newWritableRaster);
         // добавляем изображение в LinkedList
-        imageConversionIterations.add(newBufferedImage);
+        this.image = newBufferedImage;
     }
 
     /**
-     * Геттер {@link ImageCompression#imageConversionIterations}
+     * Геттер {@link ImageCompression#image}
      */
-    public List<BufferedImage> getImageConversionIterations() {
-        return imageConversionIterations;
+    public BufferedImage getImage() {
+        return image;
     }
 
     /**
-     * Сеттер {@link ImageCompression#imageConversionIterations}
+     * Сеттер {@link ImageCompression#image}
      */
-    public void setImageConversionIterations(List<BufferedImage> imageConversionIterations) {
-        this.imageConversionIterations = imageConversionIterations;
+    public void setImage(BufferedImage image) {
+        this.image = image;
     }
 
     /**
