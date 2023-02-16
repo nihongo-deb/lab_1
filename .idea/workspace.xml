@@ -1,24 +1,168 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="632f854d-eaab-4bd5-afea-a2f4a91828c6" name="Changes" comment="" />
+    <list default="true" id="632f854d-eaab-4bd5-afea-a2f4a91828c6" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/simple/App_Simple.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/simple/App_Simple.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ImageCompression.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/Old/ImageCompression.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ImageCompressionMultithreading.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/Old/ImageCompressionMultithreading.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ManualTests/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ManualTests/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/gervant_1280x960.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/gervant_2048x1536.jpg" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="jar://$USER_HOME$/.jdks/openjdk-17.0.2/lib/src.zip!/java.base/java/util/LinkedList.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.jdks/openjdk-17.0.2/lib/src.zip!/java.base/java/util/List.java" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="MavenRunner">
+    <option name="vmOptions" value="-Xmx16G" />
+  </component>
   <component name="ProjectId" id="2Ko1oHcYGpCOeSPVfg330Tj1ETX" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false"
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;F:/Projects/Multithreading programming/lab_1/src/main/resources&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.runner&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\Projects\Multithreading programming\lab_1\src\main\resources" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="F:\Projects\Multithreading programming\lab_1\src\main\resources" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.nihongo_deb" />
+      <recent name="" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.Benchmark">
+    <configuration name="Benchmark" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.nihongo_deb.Benchmark" />
+      <module name="lab_1" />
+      <option name="VM_PARAMETERS" value="-Xmx16G" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.nihongo_deb.Apps.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BufTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.nihongo_deb.ManualTests.BufTest" />
+      <module name="lab_1" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.nihongo_deb.ManualTests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.nihongo_deb.ManualTests.Main" />
+      <module name="lab_1" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.nihongo_deb.ManualTests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PerformanceTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.nihongo_deb.ManualTests.PerformanceTest" />
+      <module name="lab_1" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.nihongo_deb.ManualTests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestM" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.nihongo_deb.ManualTests.TestM" />
+      <module name="lab_1" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.nihongo_deb.BenchmarkedApps.simple.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.BufTest" />
+      <item itemvalue="Application.PerformanceTest" />
+      <item itemvalue="Application.Benchmark" />
+      <item itemvalue="Application.Main" />
+      <item itemvalue="Application.TestM" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Benchmark" />
+        <item itemvalue="Application.Main" />
+        <item itemvalue="Application.PerformanceTest" />
+        <item itemvalue="Application.BufTest" />
+        <item itemvalue="Application.TestM" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -28,8 +172,47 @@
       <option name="presentableId" value="Default" />
       <updated>1674626297583</updated>
       <workItem from="1674626299962" duration="1000" />
+      <workItem from="1674977821698" duration="3385000" />
+      <workItem from="1674984925019" duration="3022000" />
+      <workItem from="1675159902222" duration="8629000" />
+      <workItem from="1675224481562" duration="5336000" />
+      <workItem from="1675256501340" duration="3183000" />
+      <workItem from="1675266455137" duration="1706000" />
+      <workItem from="1675334218804" duration="6462000" />
+      <workItem from="1675407274653" duration="617000" />
+      <workItem from="1675487863649" duration="956000" />
+      <workItem from="1675491522269" duration="15000" />
+      <workItem from="1675511156716" duration="5328000" />
+      <workItem from="1675522704652" duration="1962000" />
+      <workItem from="1675586755817" duration="10257000" />
+      <workItem from="1675599113176" duration="2085000" />
+      <workItem from="1675601238796" duration="655000" />
+      <workItem from="1675795169535" duration="708000" />
+      <workItem from="1675830180929" duration="1744000" />
+      <workItem from="1675834664093" duration="408000" />
+      <workItem from="1675868133229" duration="1305000" />
+      <workItem from="1675927395654" duration="96000" />
+      <workItem from="1675964411720" duration="645000" />
+      <workItem from="1676092593766" duration="7270000" />
+      <workItem from="1676131938610" duration="8609000" />
+      <workItem from="1676191129930" duration="9054000" />
+      <workItem from="1676203306656" duration="2126000" />
+      <workItem from="1676310658544" duration="3795000" />
+      <workItem from="1676316317312" duration="1156000" />
+      <workItem from="1676353373782" duration="508000" />
+      <workItem from="1676354150614" duration="1016000" />
+      <workItem from="1676364552929" duration="9398000" />
+      <workItem from="1676388160848" duration="7929000" />
+      <workItem from="1676435697311" duration="730000" />
+      <workItem from="1676446332084" duration="604000" />
+      <workItem from="1676482338449" duration="3983000" />
+      <workItem from="1676486855766" duration="4796000" />
+      <workItem from="1676540049722" duration="1223000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -41,5 +224,19 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.ArrayIndexOutOfBoundsException" package="java.lang" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

@@ -1,5 +1,10 @@
-package com.nihongo_deb;
+package com.nihongo_deb.ManualTests;
 
+import com.nihongo_deb.ImageCompression;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.io.IOException;
 
 /**
@@ -8,30 +13,9 @@ import java.io.IOException;
  * @created 04.02.2023
  */
 public class Main {
-    public static void main(String[] args) throws IOException {
-        // объект класса ImageCompression, в котором будет
-        // храниться изначальное изображение и его последующие изменения
-        // в связном списке (LinkedList)
-        ImageCompression imOnlyNegative = new ImageCompression();
-        // буферезируем изображение из папки resources
-        imOnlyNegative.readeImageFromResources("gervant.jpg");
-        // выполняем инвертирование, при этом буфер старого изображение не изменяется
-        // инвертированное изображение будет помещено в связный список
-        imOnlyNegative.applyNegative();
-        // сохраняем буфер последнего изображения с расширением родителя (.jpg)
-        imOnlyNegative.saveImage("neg-gervant");
-
-        // проделываем те же операции, только изображение передаём через конструктор перовым аргументом
-        // второй аргумент показывает, что файл будет взят из resources
-        ImageCompression imOnlyCompression = new ImageCompression("gervant.jpg", true);
-        // применяем свёртку с фильтром
-        imOnlyCompression.applyConvolutionMatrix();
-        imOnlyCompression.saveImage("comp-gervant");
-
-        // проделываем те же операции
-        ImageCompression imNegativeCompression = new ImageCompression("gervant.jpg", true);
-        imNegativeCompression.applyNegative();
-        imNegativeCompression.applyConvolutionMatrix();
-        imNegativeCompression.saveImage("neg-cmp-gervant");
+    public static void main(String[] args) throws IOException, InterruptedException {
+        ImageCompression ic = new ImageCompression();
+        ic.readeImageFromResources("gervant5000.jpg");
+        ic.applyNegative();
     }
 }
