@@ -5,14 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="632f854d-eaab-4bd5-afea-a2f4a91828c6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/simple/App_Simple.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/simple/App_Simple.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ImageCompression.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/Old/ImageCompression.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ImageCompressionMultithreading.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/Old/ImageCompressionMultithreading.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/App_Multithreading.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/App_Multithreading.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ImageCompression.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ImageCompression.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ImageCompressionMultithreading.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ManualTests/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ManualTests/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/gervant_1280x960.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/gervant_2048x1536.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/Old/ImageCompression.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/Old/ImageCompressionMultithreading.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,7 +78,7 @@
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Benchmark">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Benchmark" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.nihongo_deb.Benchmark" />
       <module name="lab_1" />
@@ -155,8 +154,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Benchmark" />
         <item itemvalue="Application.Main" />
+        <item itemvalue="Application.Benchmark" />
         <item itemvalue="Application.PerformanceTest" />
         <item itemvalue="Application.BufTest" />
         <item itemvalue="Application.TestM" />
@@ -207,7 +206,8 @@
       <workItem from="1676446332084" duration="604000" />
       <workItem from="1676482338449" duration="3983000" />
       <workItem from="1676486855766" duration="4796000" />
-      <workItem from="1676540049722" duration="1223000" />
+      <workItem from="1676540049722" duration="3457000" />
+      <workItem from="1676621661793" duration="8920000" />
     </task>
     <servers />
   </component>

@@ -1,7 +1,6 @@
 package com.nihongo_deb.BenchmarkedApps.multithreading;
 
 import com.nihongo_deb.ImageCompression;
-import com.nihongo_deb.ImageCompressionMultithreading;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.concurrent.ExecutionException;

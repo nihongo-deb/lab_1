@@ -1,11 +1,7 @@
 package com.nihongo_deb.ManualTests;
-
 import com.nihongo_deb.ImageCompression;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * @author KAWAIISHY
@@ -14,8 +10,9 @@ import java.io.IOException;
  */
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
-        ImageCompression ic = new ImageCompression();
-        ic.readeImageFromResources("gervant5000.jpg");
-        ic.applyNegative();
+        ImageCompression imageCompression = new ImageCompression("gervant_1024×768.jpg", true);
+        imageCompression.applyConvolutionMatrix(200,200, imageCompression.getImage().getWidth(), imageCompression.getImage().getHeight());
+        imageCompression.writePixelsInImage();
+        imageCompression.saveImage("neg");
     }
 }
