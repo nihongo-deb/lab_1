@@ -6,7 +6,6 @@ import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -18,7 +17,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class ImageCompression {
     private BufferedImage image;
-    private short [][][] pixels;
+    private volatile short [][][] pixels;
+    private short [][][] pixelsCopy;
     private String extension;
 
     private static short[][] convolutionMatrix = new short[3][3];
@@ -45,7 +45,7 @@ public class ImageCompression {
         if (isFromResources)
             readeImageFromResources(fileName);
         else readImageFromAbsoluteFilePath(fileName);
-        getImagePixels();
+        loadImagePixels();
     }
 
     public ImageCompression() {
@@ -64,15 +64,17 @@ public class ImageCompression {
                 }
             }
         }
+
+        refreshPixelsCopy();
     }
 
-    public void applyNegative(int fromRow, int fromCol, int toRow, int toCol){
+    public void applyNegative(int fromCol, int fromRow, int toCol, int toRow){
         final int pixelLength = pixels[0][0].length;
 
-        for (int row = fromRow; row < toRow; row++){
-            for (int col = fromCol; col < toCol; col++){
+        for (int col = fromCol; col < toCol; col++){
+            for (int row = fromRow; row < toRow; row++){
                 for (int channel = 0; channel < pixelLength; channel++){
-                    pixels[col][row][channel] = (short) (255 - pixels[row][col][channel]);
+                    pixels[col][row][channel] = (short) (255 - pixels[col][row][channel]);
                 }
             }
         }
@@ -117,14 +119,6 @@ public class ImageCompression {
 
         short[][][] newPixels = new short[width][height][pixelLength];
 
-        for (int x = 0; x < width; x++){
-            for (int y = 0; y < height; y++){
-                for (int channel = 0; channel < pixelLength; channel++){
-                    newPixels[x][y][channel] = this.pixels[x][y][channel];
-                }
-            }
-        }
-
         // пробегаемся по пикселям нового изображения учитывая обрезку в 1 пиксель по краям
         for (int y = 1; y < height - 2; y++){
             for (int x = 1; x < width - 2; x++){
@@ -164,31 +158,29 @@ public class ImageCompression {
 
     public void applyConvolutionMatrix(int fromCol, int fromRow, int toCol, int toRow){
         int pixelLength = pixels[0][0].length;
-        // записываем пиксели изображения
 
         short[][][] newPixels = new short[toCol - fromCol][toRow - fromRow][pixelLength];
 
         int noOffsetCol = 0;
         int noOffsetRow = 0;
-        for (int x = fromCol; x < toCol; x++){
-            for (int y = fromRow; y < toRow; y++){
-                for (int channel = 0; channel < pixelLength; channel++){
-                    newPixels[noOffsetCol][noOffsetRow][channel] = this.pixels[x][y][channel];
-                }
-                noOffsetRow++;
-            }
-            noOffsetCol++;
-            noOffsetRow = 0;
-        }
 
-        noOffsetCol = 0;
-        noOffsetRow = 0;
         // пробегаемся по пикселям нового изображения учитывая обрезку в 1 пиксель по краям
-        for (int x = fromRow + 1; x < toCol - 2; x++){
-            for (int y = fromCol + 1; y < toRow - 2; y++){
+        for (int x = fromCol; x < toCol; x++){
+            if (x == 0)
+                continue;
+            if (x == image.getWidth() - 1)
+                break;
+
+            for (int y = fromRow; y < toRow; y++){
+                if (y == 0)
+                    continue;
+                if (y == image.getHeight() - 1)
+                    break;
+
                 short[][][] partParentPixels = new short[3][3][pixelLength]; //[ширина][высота][RGB]
                 // копируем значения пикселей в массив partParentPixels
                 // px/y - parent x/y
+
                 for (int py = 0; py < 3; py++){
                     for (int px = 0; px < 3; px++){
                         partParentPixels[px][py] = pixels[x - 1 + px][y - 1 + py].clone();
@@ -223,9 +215,19 @@ public class ImageCompression {
         noOffsetCol = 0;
         noOffsetRow = 0;
         for (int x = fromCol; x < toCol; x++){
+            if (x == 0)
+                continue;
+            if (x == image.getWidth() - 1)
+                break;
+
             for (int y = fromRow; y < toRow; y++){
+                if (y == 0)
+                    continue;
+                if (y == image.getHeight() - 1)
+                    break;
+
                 for (int channel = 0; channel < pixelLength; channel++){
-                    this.pixels[x][y][channel] = newPixels[noOffsetCol][noOffsetRow][channel];
+                    this.pixelsCopy[x][y][channel] = newPixels[noOffsetCol][noOffsetRow][channel];
                 }
                 noOffsetRow++;
             }
@@ -234,8 +236,36 @@ public class ImageCompression {
         }
     }
 
-    public void applyConvolutionMatrixMultithreading(int threadsNum){
+    public void applyConvolutionMatrixMultithreading(int threadsNum) throws InterruptedException {
+        ExecutorService executorService = Executors.newFixedThreadPool(threadsNum);
+        int widthDelta = image.getWidth() / threadsNum;
+        int unexpectedPixelRows = image.getWidth() % threadsNum;
+        int height = image.getHeight();
 
+        for (int i = 0; i < threadsNum - 1; i++) {
+            executorService.submit(
+                    new ConvolutionMatrixImageRunner(
+                            i * widthDelta,
+                            0,
+                            (i + 1) * widthDelta,
+                            height
+                    )
+            );
+        }
+
+        executorService.submit(
+                new ConvolutionMatrixImageRunner(
+                        (threadsNum - 1) * widthDelta,
+                        0,
+                        threadsNum * widthDelta + unexpectedPixelRows,
+                        height
+                )
+        );
+        // запуск потоков (fork)
+        executorService.shutdown();
+        // ожидание выполнения всех потоков (join)
+        executorService.awaitTermination(1, TimeUnit.HOURS);
+        setPixelsFromCopy();
     }
 
     public void writePixelsInImage(){
@@ -256,7 +286,7 @@ public class ImageCompression {
         image.setData(raster);
     }
 
-    private void getImagePixels() {
+    private void loadImagePixels() {
         final int width = image.getWidth();
         final int height = image.getHeight();
         int[] unifiedPixels;
@@ -310,7 +340,8 @@ public class ImageCompression {
             throw new RuntimeException(e);
         }
         if (this.pixels == null)
-            getImagePixels();
+            loadImagePixels();
+        refreshPixelsCopy();
     }
 
     public void readImageFromAbsoluteFilePath(String absoluteFilePath){
@@ -322,7 +353,20 @@ public class ImageCompression {
             throw new RuntimeException(e);
         }
         if (this.pixels == null)
-            getImagePixels();
+            loadImagePixels();
+        refreshPixelsCopy();
+    }
+
+    public void refreshPixelsCopy(){
+        int pixelLength = this.pixels[0][0].length;
+
+        this.pixelsCopy = new short[this.image.getWidth()][this.image.getHeight()][pixelLength];
+
+        for (int col = 0; col < this.image.getWidth(); col++){
+            for (int row = 0; row < this.image.getHeight(); row++){
+                this.pixelsCopy[col][row] = this.pixels[col][row].clone();
+            }
+        }
     }
 
     public void saveImage(String newFileName) throws IOException {
@@ -349,13 +393,17 @@ public class ImageCompression {
         return pixels;
     }
 
+    private void setPixelsFromCopy(){
+        this.pixels = this.pixelsCopy;
+    }
+
     private class NegativeImageRunner implements Runnable {
         private int fromRow;
         private int fromCol;
         private int toRow;
         private int toCol;
 
-        public NegativeImageRunner(int fromRow, int fromCol, int toRow, int toCol){
+        public NegativeImageRunner(int fromCol, int fromRow, int toCol, int toRow){
             this.fromRow = fromRow;
             this.fromCol = fromCol;
             this.toRow = toRow;
@@ -364,7 +412,7 @@ public class ImageCompression {
 
         @Override
         public void run() {
-            applyNegative(fromRow, fromCol, toRow, toCol);
+            applyNegative(fromCol, fromRow, toCol, toRow);
         }
     }
 
@@ -374,7 +422,7 @@ public class ImageCompression {
         private int toRow;
         private int toCol;
 
-        public ConvolutionMatrixImageRunner(int fromRow, int fromCol, int toRow, int toCol){
+        public ConvolutionMatrixImageRunner(int fromCol, int fromRow,int toCol, int toRow){
             this.fromRow = fromRow;
             this.fromCol = fromCol;
             this.toRow = toRow;
@@ -383,7 +431,7 @@ public class ImageCompression {
 
         @Override
         public void run() {
-            applyConvolutionMatrix(fromRow, fromCol, toRow, toCol);
+            applyConvolutionMatrix(fromCol, fromRow, toCol, toRow);
         }
     }
 }

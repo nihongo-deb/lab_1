@@ -3,6 +3,7 @@ package com.nihongo_deb.BenchmarkedApps.multithreading;
 import com.nihongo_deb.ImageCompression;
 import org.openjdk.jmh.annotations.*;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -16,7 +17,7 @@ public class App_Multithreading {
     private static final ImageCompression imageCompression = new ImageCompression();
     private static int numThreads;
     {
-        imageCompression.readeImageFromResources("huge-gervant.jpg");
+        imageCompression.readeImageFromResources("gervant_2048×1536.jpg");
         numThreads = 8;
     }
 
@@ -27,11 +28,11 @@ public class App_Multithreading {
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     @Measurement(iterations = 1)
     public void convertImage() throws ExecutionException, InterruptedException {
-        imageCompression.applyNegativeMultithreading(numThreads);
+        imageCompression.applyConvolutionMatrixMultithreading(numThreads);
     }
 
-//    @TearDown
-//    public void save() throws IOException {
-//        imageCompression.saveImage("multithreading_les");
-//    }
+    @TearDown
+    public void save() throws IOException {
+        imageCompression.saveImage("multithreading");
+    }
 }

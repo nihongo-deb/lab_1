@@ -6,12 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="632f854d-eaab-4bd5-afea-a2f4a91828c6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/App_Multithreading.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/App_Multithreading.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/neg.jpg" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ImageCompression.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ImageCompression.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ImageCompressionMultithreading.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ManualTests/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ManualTests/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/Old/ImageCompression.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/Old/ImageCompressionMultithreading.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,6 +40,7 @@
     </option>
   </component>
   <component name="MavenRunner">
+    <option name="jreName" value="openjdk-17" />
     <option name="vmOptions" value="-Xmx16G" />
   </component>
   <component name="ProjectId" id="2Ko1oHcYGpCOeSPVfg330Tj1ETX" />
@@ -62,6 +60,9 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.runner&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -78,7 +79,7 @@
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="Application.Benchmark">
     <configuration name="Benchmark" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.nihongo_deb.Benchmark" />
       <module name="lab_1" />
@@ -107,8 +108,10 @@
       </method>
     </configuration>
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="17" />
       <option name="MAIN_CLASS_NAME" value="com.nihongo_deb.ManualTests.Main" />
       <module name="lab_1" />
+      <option name="VM_PARAMETERS" value="-Xmx16G" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.nihongo_deb.ManualTests.*" />
@@ -154,8 +157,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Main" />
         <item itemvalue="Application.Benchmark" />
+        <item itemvalue="Application.Main" />
         <item itemvalue="Application.PerformanceTest" />
         <item itemvalue="Application.BufTest" />
         <item itemvalue="Application.TestM" />
@@ -207,7 +210,9 @@
       <workItem from="1676482338449" duration="3983000" />
       <workItem from="1676486855766" duration="4796000" />
       <workItem from="1676540049722" duration="3457000" />
-      <workItem from="1676621661793" duration="8920000" />
+      <workItem from="1676621661793" duration="13700000" />
+      <workItem from="1676713039154" duration="2561000" />
+      <workItem from="1676715631758" duration="1499000" />
     </task>
     <servers />
   </component>

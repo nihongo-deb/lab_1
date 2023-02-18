@@ -3,6 +3,7 @@ package com.nihongo_deb.BenchmarkedApps.simple;
 import com.nihongo_deb.ImageCompression;
 import org.openjdk.jmh.annotations.*;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -14,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class App_Simple {
     private static final ImageCompression imageCompression = new ImageCompression();
     {
-        imageCompression.readeImageFromResources("huge-gervant-simple.jpg");
+        imageCompression.readeImageFromResources("gervant_2048×1536.jpg");
     }
 
     @Benchmark
@@ -24,11 +25,16 @@ public class App_Simple {
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     @Measurement(iterations = 1)
     public void convertImage(){
-        imageCompression.applyNegative();
+        imageCompression.applyConvolutionMatrix(
+                0,
+                0,
+                imageCompression.getImage().getWidth(),
+                imageCompression.getImage().getHeight()
+        );
     }
 
-//    @TearDown
-//    public void save() throws IOException {
-//        imageCompression.saveImage("simple_les");
-//    }
+    @TearDown
+    public void save() throws IOException {
+        imageCompression.saveImage("simple");
+    }
 }
