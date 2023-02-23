@@ -268,6 +268,31 @@ public class ImageCompression {
         setPixelsFromCopy();
     }
 
+    public void applyBinary(int fromCol, int fromRow, int toCol, int toRow, short threshold){
+        final int pixelLength = pixels[0][0].length;
+        short middleIntensity = 0;
+        short channelValue;
+
+        for (int col = fromCol; col < toCol; col++){
+            for (int row = fromRow; row < toRow; row++){
+                for (int channel = 0; channel < pixelLength; channel++){
+                    middleIntensity += pixels[col][row][channel] / pixelLength;
+                }
+
+                if (middleIntensity < threshold)
+                    channelValue = 0;
+                else
+                    channelValue = 255;
+
+                for (int channel = 0; channel < pixelLength; channel++){
+                    pixels[col][row][channel] = channelValue;
+                }
+
+                middleIntensity = 0;
+            }
+        }
+    }
+
     public void writePixelsInImage(){
         int[] rasterFormatPixels = new int[image.getWidth() * image.getHeight() * pixels[0][0].length];
         WritableRaster raster = this.image.getRaster();

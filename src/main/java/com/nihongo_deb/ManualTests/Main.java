@@ -10,9 +10,15 @@ import java.util.Arrays;
  */
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
-        ImageCompression imageCompression = new ImageCompression("huge-gervant.jpg", true);
-        imageCompression.applyConvolutionMatrixMultithreading(4);
+        ImageCompression imageCompression = new ImageCompression("gervant.jpg", true);
+        imageCompression.applyBinary(
+                0,
+                0,
+                imageCompression.getImage().getWidth(),
+                imageCompression.getImage().getHeight(),
+                (short) 200
+        );
         imageCompression.writePixelsInImage();
-        imageCompression.saveImage("compressed-image");
+        imageCompression.saveImage("binary-image");
     }
 }
