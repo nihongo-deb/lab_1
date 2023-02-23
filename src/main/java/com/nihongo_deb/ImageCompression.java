@@ -285,12 +285,46 @@ public class ImageCompression {
                     channelValue = 255;
 
                 for (int channel = 0; channel < pixelLength; channel++){
-                    pixels[col][row][channel] = channelValue;
+                    pixelsCopy[col][row][channel] = channelValue;
                 }
 
                 middleIntensity = 0;
             }
         }
+    }
+
+    public void applyBinaryMultithreading(int threadsNum, short threshold) throws InterruptedException {
+        ExecutorService executorService = Executors.newFixedThreadPool(threadsNum);
+        int widthDelta = image.getWidth() / threadsNum;
+        int unexpectedPixelRows = image.getWidth() % threadsNum;
+        int height = image.getHeight();
+
+        for (int i = 0; i < threadsNum - 1; i++) {
+            executorService.submit(
+                    new BinaryImageRunner(
+                            i * widthDelta,
+                            0,
+                            (i + 1) * widthDelta,
+                            height,
+                            threshold
+                    )
+            );
+        }
+
+        executorService.submit(
+                new BinaryImageRunner(
+                        (threadsNum - 1) * widthDelta,
+                        0,
+                        threadsNum * widthDelta + unexpectedPixelRows,
+                        height,
+                        threshold
+                )
+        );
+        // запуск потоков (fork)
+        executorService.shutdown();
+        // ожидание выполнения всех потоков (join)
+        executorService.awaitTermination(1, TimeUnit.HOURS);
+        setPixelsFromCopy();
     }
 
     public void writePixelsInImage(){
@@ -418,19 +452,19 @@ public class ImageCompression {
         return pixels;
     }
 
-    private void setPixelsFromCopy(){
+    public void setPixelsFromCopy(){
         this.pixels = this.pixelsCopy;
     }
 
     private class NegativeImageRunner implements Runnable {
-        private int fromRow;
         private int fromCol;
+        private int fromRow;
         private int toRow;
         private int toCol;
 
         public NegativeImageRunner(int fromCol, int fromRow, int toCol, int toRow){
-            this.fromRow = fromRow;
             this.fromCol = fromCol;
+            this.fromRow = fromRow;
             this.toRow = toRow;
             this.toCol = toCol;
         }
@@ -442,14 +476,14 @@ public class ImageCompression {
     }
 
     private class ConvolutionMatrixImageRunner implements Runnable {
-        private int fromRow;
         private int fromCol;
+        private int fromRow;
         private int toRow;
         private int toCol;
 
-        public ConvolutionMatrixImageRunner(int fromCol, int fromRow,int toCol, int toRow){
-            this.fromRow = fromRow;
+        public ConvolutionMatrixImageRunner(int fromCol, int fromRow, int toCol, int toRow){
             this.fromCol = fromCol;
+            this.fromRow = fromRow;
             this.toRow = toRow;
             this.toCol = toCol;
         }
@@ -457,6 +491,27 @@ public class ImageCompression {
         @Override
         public void run() {
             applyConvolutionMatrix(fromCol, fromRow, toCol, toRow);
+        }
+    }
+
+    private class BinaryImageRunner implements Runnable{
+        private int fromRow;
+        private int fromCol;
+        private int toRow;
+        private int toCol;
+        private short threshold;
+
+        public BinaryImageRunner(int fromCol, int fromRow, int toCol, int toRow, short threshold) {
+            this.fromCol = fromCol;
+            this.fromRow = fromRow;
+            this.toCol = toCol;
+            this.toRow = toRow;
+            this.threshold = threshold;
+        }
+
+        @Override
+        public void run() {
+            applyBinary(fromCol, fromRow, toCol, toRow, threshold);
         }
     }
 }
