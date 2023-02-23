@@ -11,17 +11,12 @@ import java.util.Arrays;
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
         ImageCompression imageCompression = new ImageCompression("gervant.jpg", true);
+
         imageCompression.applyBinaryMultithreading(2, (short) 200);
         imageCompression.writePixelsInImage();
         imageCompression.saveImage("binary-image-mult");
 
-        imageCompression.applyDilation(
-                0,
-                0,
-                imageCompression.getImage().getWidth(),
-                imageCompression.getImage().getHeight()
-        );
-        imageCompression.setPixelsFromCopy();
+        imageCompression.applyDilationMultithreading(2);
         imageCompression.writePixelsInImage();
         imageCompression.saveImage("binary-image-mult-dil");
     }

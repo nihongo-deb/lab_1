@@ -355,6 +355,38 @@ public class ImageCompression {
         }
     }
 
+    public void applyDilationMultithreading(int threadsNum) throws InterruptedException {
+        ExecutorService executorService = Executors.newFixedThreadPool(threadsNum);
+        int widthDelta = image.getWidth() / threadsNum;
+        int unexpectedPixelRows = image.getWidth() % threadsNum;
+        int height = image.getHeight();
+
+        for (int i = 0; i < threadsNum - 1; i++) {
+            executorService.submit(
+                    new DilatationBinaryImageRunner(
+                            i * widthDelta,
+                            0,
+                            (i + 1) * widthDelta,
+                            height
+                    )
+            );
+        }
+
+        executorService.submit(
+                new DilatationBinaryImageRunner(
+                        (threadsNum - 1) * widthDelta,
+                        0,
+                        threadsNum * widthDelta + unexpectedPixelRows,
+                        height
+                )
+        );
+        // запуск потоков (fork)
+        executorService.shutdown();
+        // ожидание выполнения всех потоков (join)
+        executorService.awaitTermination(1, TimeUnit.HOURS);
+        setPixelsFromCopy();
+    }
+
     public void writePixelsInImage(){
         int[] rasterFormatPixels = new int[image.getWidth() * image.getHeight() * pixels[0][0].length];
         WritableRaster raster = this.image.getRaster();
@@ -548,6 +580,25 @@ public class ImageCompression {
         @Override
         public void run() {
             applyBinary(fromCol, fromRow, toCol, toRow, threshold);
+        }
+    }
+
+    private class DilatationBinaryImageRunner implements Runnable{
+        private int fromRow;
+        private int fromCol;
+        private int toRow;
+        private int toCol;
+
+        public DilatationBinaryImageRunner(int fromCol, int fromRow, int toCol, int toRow) {
+            this.fromCol = fromCol;
+            this.fromRow = fromRow;
+            this.toCol = toCol;
+            this.toRow = toRow;
+        }
+
+        @Override
+        public void run() {
+            applyDilation(fromCol, fromRow, toCol, toRow);
         }
     }
 }
