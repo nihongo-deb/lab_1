@@ -327,6 +327,34 @@ public class ImageCompression {
         setPixelsFromCopy();
     }
 
+    public void applyDilation(int fromCol, int fromRow, int toCol, int toRow){
+        final int pixelLength = pixels[0][0].length;
+
+        for (int col = fromCol; col < toCol; col++){
+            for (int row = fromRow; row < toRow; row++){
+                if (pixels[col][row][0] > 0)
+                    continue;
+                for (int partCol = col - 1; partCol < col + 2; partCol++){
+                    if (partCol < 0 || partCol >= toCol)
+                        continue;
+                    for (int partRow = row - 1; partRow < row + 2; partRow++){
+                        if (partRow < 0 || partRow >= toRow)
+                            continue;
+                        if (partRow == row && partCol == col)
+                            continue;
+
+                        if (pixels[partCol][partRow][0] != 0) {
+                            for (int channel = 0; channel < pixelLength; channel++){
+                                pixelsCopy[col][row][channel] = 255;
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+
     public void writePixelsInImage(){
         int[] rasterFormatPixels = new int[image.getWidth() * image.getHeight() * pixels[0][0].length];
         WritableRaster raster = this.image.getRaster();
@@ -453,7 +481,15 @@ public class ImageCompression {
     }
 
     public void setPixelsFromCopy(){
-        this.pixels = this.pixelsCopy;
+        int pixelLength = pixels[0][0].length;
+
+        for (int col = 0; col < image.getWidth(); col++){
+            for (int row = 0; row < image.getHeight(); row++){
+                for (int channel = 0; channel < pixelLength; channel++){
+                    this.pixels[col][row] = this.pixelsCopy[col][row].clone();
+                }
+            }
+        }
     }
 
     private class NegativeImageRunner implements Runnable {
