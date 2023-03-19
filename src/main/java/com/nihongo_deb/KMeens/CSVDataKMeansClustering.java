@@ -33,10 +33,15 @@ public class CSVDataKMeansClustering {
         this.ordinateIndex = ordinateIndex;
         this.abscissaIndex = abscissaIndex;
 
+        // загружаем строки из CSV файла
         loadCSV(resourcesPath);
+        // инициализируем начальное максимальное и минимальное значение ординат и абсциссы
         initMaxMin();
         // заполнение данных для кластеризации
         fillClusteringElements();
+
+        //отчищаем память
+        allCSV = new LinkedList<>();
     }
 
     private void loadCSV(String resourcesPath) throws IOException, CsvException {
@@ -99,5 +104,29 @@ public class CSVDataKMeansClustering {
         }
 
         System.out.println(stringBuilder.toString());
+    }
+
+    public int elementsSize(){
+        return elements.size();
+    }
+
+    public double getOrdinateMax() {
+        return ordinateMax;
+    }
+
+    public double getOrdinateMin() {
+        return ordinateMin;
+    }
+
+    public double getAbscissaMax() {
+        return abscissaMax;
+    }
+
+    public double getAbscissaMin() {
+        return abscissaMin;
+    }
+
+    public List<Element<Double>> getElements() {
+        return elements;
     }
 }

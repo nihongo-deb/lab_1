@@ -1,6 +1,8 @@
 package com.nihongo_deb.ManualTests;
 
 import com.nihongo_deb.KMeens.CSVDataKMeansClustering;
+import com.nihongo_deb.KMeens.Graph.Dots;
+import com.nihongo_deb.KMeens.Graph.KMeansElementsGraph;
 import com.opencsv.exceptions.CsvException;
 
 import java.io.IOException;
@@ -13,6 +15,9 @@ import java.io.IOException;
 public class TestCSV {
     public static void main(String[] args) throws IOException, CsvException {
         CSVDataKMeansClustering data = new CSVDataKMeansClustering("BD-Patients.csv", 37, 117);
-        data.printElements();
+
+        KMeansElementsGraph graph = new KMeansElementsGraph("K-means graph");
+        Dots dots = new Dots(data);
+        graph.add(dots);
     }
 }

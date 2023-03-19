@@ -7,8 +7,8 @@ package com.nihongo_deb.KMeens;
  */
 // класс для хранен данных элемента для кластеризации
 public class Element <K>{
-    final K ordinate;
-    final K abscissa;
+    public final K ordinate;
+    public final K abscissa;
 
     public Element(K ordinate, K abscissa) {
         this.ordinate = ordinate;
