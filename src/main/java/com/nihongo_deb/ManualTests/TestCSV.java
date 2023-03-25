@@ -1,11 +1,12 @@
 package com.nihongo_deb.ManualTests;
 
-import com.nihongo_deb.KMeens.CSVDataKMeansClustering;
-import com.nihongo_deb.KMeens.Graph.Dots;
-import com.nihongo_deb.KMeens.Graph.KMeansElementsGraph;
+import com.nihongo_deb.KMeens.CSVDataLoader;
+import com.nihongo_deb.KMeens.Element;
+import com.nihongo_deb.KMeens.KMeansCluster;
 import com.opencsv.exceptions.CsvException;
 
 import java.io.IOException;
+import java.util.Random;
 
 /**
  * @author KAWAIISHY
@@ -14,10 +15,23 @@ import java.io.IOException;
  */
 public class TestCSV {
     public static void main(String[] args) throws IOException, CsvException {
-        CSVDataKMeansClustering data = new CSVDataKMeansClustering("BD-Patients.csv", 37, 117);
+        CSVDataLoader data = new CSVDataLoader("BD-Patients.csv", 37, 117);
+        data.writeElementsInTXT("foundData.txt");
 
-        KMeansElementsGraph graph = new KMeansElementsGraph("K-means graph");
-        Dots dots = new Dots(data);
-        graph.add(dots);
+        int clusterNumber = 5;
+        KMeansCluster cluster = new KMeansCluster(data, clusterNumber, 1000);
+
+        for (int cl = 0; cl < 5; cl ++) {
+            for (int i = 0; i < clusterNumber; i++) {
+//                System.out.println("-------------------");
+                System.out.println("<<< CLUSTER №" + i + " " + cluster.getClusters().get(i).size() + " " + cluster.getCenters().get(i).abscissa + "\t" + cluster.getCenters().get(i).ordinate + " >>>");
+//                for (Element e : cluster.getClusters().get(i)){
+//                    System.out.println(e.abscissa + "\t\t\t" + e.ordinate);
+//                }
+//                System.out.println("-------------------");
+            }
+            cluster.doClustering();
+            System.out.println("\n ########################################## \n");
+        }
     }
 }

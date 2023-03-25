@@ -3,10 +3,9 @@ package com.nihongo_deb.KMeens;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,9 +14,9 @@ import java.util.List;
  * @project lab_1
  * @created 12.03.2023
  */
-public class CSVDataKMeansClustering {
+public class CSVDataLoader {
     private List<String[]> allCSV;
-    private List<Element<Double>> elements = new LinkedList<>();
+    private List<Element> elements = new ArrayList<>();
     private final int ordinateIndex;
     private final int abscissaIndex;
 
@@ -28,8 +27,10 @@ public class CSVDataKMeansClustering {
     private double abscissaMax = 0;
     private double abscissaMin = 0;
 
+
+
     // TODO добавить чтение файла по абсолютному пути
-    public CSVDataKMeansClustering(String resourcesPath, int ordinateIndex, int abscissaIndex) throws IOException, CsvException {
+    public CSVDataLoader(String resourcesPath, int ordinateIndex, int abscissaIndex) throws IOException, CsvException {
         this.ordinateIndex = ordinateIndex;
         this.abscissaIndex = abscissaIndex;
 
@@ -38,7 +39,7 @@ public class CSVDataKMeansClustering {
         // инициализируем начальное максимальное и минимальное значение ординат и абсциссы
         initMaxMin();
         // заполнение данных для кластеризации
-        fillClusteringElements();
+        fillElements();
 
         //отчищаем память
         allCSV = new LinkedList<>();
@@ -58,8 +59,8 @@ public class CSVDataKMeansClustering {
         while (noMaxMinInited){
             // нулевая строка содержит имена колонок
             boolean isDataExist =
-                    this.allCSV.get(csvRow)[this.ordinateIndex] != null && !allCSV.get(csvRow)[this.ordinateIndex].isEmpty() &&
-                            this.allCSV.get(csvRow)[this.abscissaIndex] != null && !allCSV.get(csvRow)[this.abscissaIndex].isEmpty();
+                    (this.allCSV.get(csvRow)[this.ordinateIndex] != null) && !allCSV.get(csvRow)[this.ordinateIndex].isEmpty() &&
+                    (this.allCSV.get(csvRow)[this.abscissaIndex] != null) && !allCSV.get(csvRow)[this.abscissaIndex].isEmpty();
 
             if (isDataExist){
                 this.ordinateMax = Double.parseDouble(this.allCSV.get(csvRow)[this.ordinateIndex]);
@@ -73,14 +74,14 @@ public class CSVDataKMeansClustering {
         }
     }
 
-    private void fillClusteringElements(){
-        Element<Double> currentElement;
+    private void fillElements(){
+        Element currentElement;
         for (int csv = 1, i = 0; i < this.allCSV.size() - 1; i++, csv++){
             boolean isDataExist =
                     this.allCSV.get(csv)[this.ordinateIndex] != null && !this.allCSV.get(csv)[this.ordinateIndex].isEmpty() &&
                     this.allCSV.get(csv)[this.abscissaIndex] != null && !this.allCSV.get(csv)[this.abscissaIndex].isEmpty();
             if (isDataExist) {
-                currentElement = new Element<>(
+                currentElement = new Element(
                         Double.parseDouble(this.allCSV.get(csv)[ordinateIndex]),
                         Double.parseDouble(this.allCSV.get(csv)[abscissaIndex]));
 
@@ -93,6 +94,7 @@ public class CSVDataKMeansClustering {
                 this.elements.add(currentElement);
             }
         }
+//        elements.replaceAll(doubleElement -> new Element(doubleElement.abscissa / abscissaMax, doubleElement.ordinate / ordinateMax));
     }
 
     public void printElements(){
@@ -104,6 +106,16 @@ public class CSVDataKMeansClustering {
         }
 
         System.out.println(stringBuilder.toString());
+    }
+
+    public void writeElementsInTXT(String fileName) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true));
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Element e : elements){
+            stringBuilder.append(e.abscissa).append(";").append(e.ordinate).append("\n");
+        }
+        writer.append(stringBuilder.toString());
+        writer.close();
     }
 
     public int elementsSize(){
@@ -126,7 +138,7 @@ public class CSVDataKMeansClustering {
         return abscissaMin;
     }
 
-    public List<Element<Double>> getElements() {
+    public List<Element> getElements() {
         return elements;
     }
 }
