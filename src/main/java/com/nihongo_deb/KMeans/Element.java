@@ -1,4 +1,4 @@
-package com.nihongo_deb.KMeens;
+package com.nihongo_deb.KMeans;
 
 import java.awt.*;
 

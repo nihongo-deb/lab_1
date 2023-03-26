@@ -5,13 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="632f854d-eaab-4bd5-afea-a2f4a91828c6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeens/KMeansCluster.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeens/KMeansPrinter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeens/CSVDataKMeansClustering.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeens/CSVDataLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeens/Element.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeens/Element.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeens/Graph/Dots.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeens/Graph/KMeansElementsGraph.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeens/CSVDataLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/CSVDataLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeens/Element.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/Element.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeens/KMeansCluster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/KMeansCluster.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeens/KMeansPrinter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/KMeansPrinter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ManualTests/TestCSV.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ManualTests/TestCSV.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -93,7 +91,7 @@
       <command value="mvn clean install" />
     </option>
   </component>
-  <component name="RunManager" selected="Application.TestCSV">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="CSV_JavaFX" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.nihongo_deb.CSV_JavaFX" />
       <module name="lab_1" />
@@ -170,11 +168,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Main" />
         <item itemvalue="Application.TestCSV" />
         <item itemvalue="Application.CSV_JavaFX" />
         <item itemvalue="Application.Javafx" />
         <item itemvalue="Application.JavaFx" />
-        <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
   </component>
@@ -242,7 +240,8 @@
       <workItem from="1679656613712" duration="601000" />
       <workItem from="1679665121298" duration="8334000" />
       <workItem from="1679731488502" duration="317000" />
-      <workItem from="1679732114857" duration="10275000" />
+      <workItem from="1679732114857" duration="10638000" />
+      <workItem from="1679832268882" duration="3794000" />
     </task>
     <servers />
   </component>

@@ -1,4 +1,4 @@
-package com.nihongo_deb.KMeens;
+package com.nihongo_deb.KMeans;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
@@ -94,7 +94,7 @@ public class CSVDataLoader {
                 this.elements.add(currentElement);
             }
         }
-//        elements.replaceAll(doubleElement -> new Element(doubleElement.abscissa / abscissaMax, doubleElement.ordinate / ordinateMax));
+        elements.replaceAll(doubleElement -> new Element(doubleElement.abscissa / abscissaMax, doubleElement.ordinate / ordinateMax));
     }
 
     public void printElements(){

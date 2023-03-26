@@ -1,4 +1,4 @@
-package com.nihongo_deb.KMeens;
+package com.nihongo_deb.KMeans;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,9 +39,10 @@ public class KMeansCluster {
         this.clusters = new ArrayList<>();
         this.centers = new ArrayList<>();
 
-        int index = 0;
+
         int csvDataLoaderSize = csvDataLoader.elementsSize();
         Random random = new Random();
+        int index = 0;
         while (elements.size() < elementsNumber){
             elements.add(csvDataLoader.getElements().get(index));
 //            index += random.nextInt(csvDataLoaderSize / elementsNumber - 1) + 1;
@@ -141,6 +142,10 @@ public class KMeansCluster {
         return index;
     }
 
+    public double findCSIndex() {
+
+        return 0.0;
+    }
     public List<Element> getElements() {
         return elements;
     }
