@@ -6,11 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="632f854d-eaab-4bd5-afea-a2f4a91828c6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeens/CSVDataLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/CSVDataLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeens/Element.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/Element.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeens/KMeansCluster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/KMeansCluster.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeens/KMeansPrinter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/KMeansPrinter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ManualTests/TestCSV.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ManualTests/TestCSV.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/Element.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/Element.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/KMeansCluster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/KMeansCluster.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,7 +88,7 @@
       <command value="mvn clean install" />
     </option>
   </component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="Application.Edutest">
     <configuration name="CSV_JavaFX" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.nihongo_deb.CSV_JavaFX" />
       <module name="lab_1" />
@@ -105,12 +102,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="JavaFx" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.nihongo_deb.JavaFx" />
+    <configuration name="Edutest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.nihongo_deb.ManualTests.Edutest" />
       <module name="lab_1" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.nihongo_deb.KMeens.Graph.*" />
+          <option name="PATTERN" value="com.nihongo_deb.ManualTests.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -160,19 +157,19 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Application.Edutest" />
       <item itemvalue="Application.TestCSV" />
       <item itemvalue="Application.CSV_JavaFX" />
-      <item itemvalue="Application.JavaFx" />
       <item itemvalue="Application.Javafx" />
       <item itemvalue="Application.Main" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Edutest" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.TestCSV" />
         <item itemvalue="Application.CSV_JavaFX" />
         <item itemvalue="Application.Javafx" />
-        <item itemvalue="Application.JavaFx" />
       </list>
     </recent_temporary>
   </component>
@@ -242,6 +239,8 @@
       <workItem from="1679731488502" duration="317000" />
       <workItem from="1679732114857" duration="10638000" />
       <workItem from="1679832268882" duration="3794000" />
+      <workItem from="1679841045553" duration="859000" />
+      <workItem from="1679994655423" duration="4464000" />
     </task>
     <servers />
   </component>

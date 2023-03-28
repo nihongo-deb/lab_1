@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static java.lang.Math.*;
 
@@ -142,9 +145,65 @@ public class KMeansCluster {
         return index;
     }
 
-    public double findCSIndex() {
+    private double distanceBetweenTwoElements(Element el1, Element el2){
+        double distance =
+                sqrt(
+                        pow(abs(el1.abscissa - el2.abscissa), 2) +
+                        pow(abs(el1.ordinate - el2.ordinate), 2)
+                );
 
-        return 0.0;
+        return distance;
+    }
+
+    private double farthestComrade(Element element){
+        double maxDistance = 0.0;
+
+        for (Element e : clusters.get(element.colorIndex)){
+            double currentDist = distanceBetweenTwoElements(element, e);
+            if(maxDistance < currentDist){
+                maxDistance = currentDist;
+            }
+        }
+
+        return maxDistance;
+    }
+
+    public double findCSIndex(int threadNum) throws InterruptedException {
+        List<Double> partsOfNumerator = new ArrayList<>();
+        double numerator = 0.0;
+        double denominator = 0.0;
+
+        for (int partIndex = 0; partIndex < threadNum; partIndex++) {
+            partsOfNumerator.add(0.0);
+        }
+
+        ExecutorService executorService = Executors.newFixedThreadPool(threadNum);
+
+        for (int threadIndex = 0; threadIndex < threadNum; threadIndex++){
+            executorService.submit(new CSIndexRunner(threadNum, threadIndex, partsOfNumerator));
+        }
+
+        executorService.shutdown();
+        executorService.awaitTermination(1, TimeUnit.HOURS);
+
+        for (Double d : partsOfNumerator) {
+            numerator += d;
+        }
+
+        for (int clusterIndex = 0; clusterIndex < clustersNumber; clusterIndex++){
+            double maxDist = 0.0;
+            for (Element c1 : centers){
+                for (Element c2 : centers){
+                    double currentDist = distanceBetweenTwoElements(c1, c2);
+                    if (maxDist < currentDist){
+                        maxDist = currentDist;
+                    }
+                }
+            }
+            denominator += maxDist;
+        }
+
+        return numerator / denominator;
     }
     public List<Element> getElements() {
         return elements;
@@ -168,5 +227,39 @@ public class KMeansCluster {
 
     public void setCenters(List<Element> centers) {
         this.centers = centers;
+    }
+
+    private class CSIndexRunner implements Runnable{
+        private int threadNum;
+        private int threadIndex;
+        private List<Double> partsOfNumerator;
+        private double sum = 0.0;
+
+        public CSIndexRunner(int threadNum, int threadIndex, List<Double> partsOfNumerator){
+            this.threadIndex = threadIndex;
+            this.threadNum = threadNum;
+            this.partsOfNumerator = partsOfNumerator;
+        }
+
+        @Override
+        public void run() {
+            if (threadIndex == 0){
+                for (int elIndex = 0; elIndex < elements.size() / threadNum; elIndex++){
+                    sum += farthestComrade(elements.get(elIndex));
+                }
+            } else {
+                if (threadIndex == threadNum - 1){
+                    for (int elIndex = elements.size() / threadIndex; elIndex < elements.size(); elIndex++){
+                        sum += farthestComrade(elements.get(elIndex));
+                    }
+                } else {
+                    for (int elIndex = elements.size() / threadIndex; elIndex < elements.size() / (elIndex + 1); elIndex++){
+                        sum += farthestComrade(elements.get(elIndex));
+                    }
+                }
+            }
+
+            partsOfNumerator.set(threadIndex, sum);
+        }
     }
 }

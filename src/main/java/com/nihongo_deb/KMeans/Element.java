@@ -21,6 +21,7 @@ public class Element implements Comparable{
     public final double ordinate;
     public final double length;
     public Color color;
+    public byte colorIndex;
 
     public Element(double abscissa, double ordinate) {
         this.abscissa = abscissa;
@@ -28,6 +29,7 @@ public class Element implements Comparable{
         this.length = Math.sqrt(Math.pow(abscissa, 2) + Math.pow(ordinate, 2));
 
         this.color = Color.BLACK;
+        this.colorIndex = (byte) 0;
     }
 
     public Element(double abscissa, double ordinate, int colorIndex) {
@@ -36,6 +38,7 @@ public class Element implements Comparable{
         this.length = Math.sqrt(Math.pow(abscissa, 2) + Math.pow(ordinate, 2));
 
         this.color = colors[colorIndex];
+        this.colorIndex = (byte) colorIndex;
     }
 
     public void setColor(int colorIndex){
