@@ -2,11 +2,7 @@ package com.nihongo_deb.ManualTests;
 
 import com.nihongo_deb.KMeans.CSVDataLoader;
 import com.nihongo_deb.KMeans.KMeansCluster;
-
-import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import org.apache.commons.math3.util.Pair;
 
 /**
  * @author KAWAIISHY
@@ -41,33 +37,17 @@ public class TestCSV {
         System.out.println("##########################################");
         System.out.println("########################################## \n");
 
+        for (int threadNum = 1; threadNum < 50; threadNum++){
+            System.out.println("Thread num: " + threadNum);
+            for (int warmUpIter = 0; warmUpIter < 1000; warmUpIter++)
+                cluster.findCSIndex(1);
 
-        int threadNum = 1;
-        long before;
-        long after;
-        System.out.println();
+            Pair<Double, Long> pair = cluster.findCSIndex(1);
 
-        for (int i = 12; i <= 12; i ++){
-            ExecutorService es = Executors.newFixedThreadPool(i);
-
-            // Warm-up
-            for (int j = 0; j < 10; j++) {
-                cluster.findCSIndex(i, es);
-            }
-
-            long time = 0;
-            for (int j = 0; j < 100000; j++) {
-                var res = cluster.findCSIndex(i, es);
-                time += res.getValue();
-            }
-
-            System.out.println("Elapsed time for " + i + " threads:\n" + (time / 100000) + "\n");
-
-            es.shutdown();
-            es.awaitTermination(1, TimeUnit.DAYS);
+//            System.out.println("Result: " + pair.getKey());
+            System.out.println("Elapse time: " + pair.getValue());
+            System.out.println("- - - -");
         }
-
-
 
     }
 }

@@ -2,10 +2,7 @@ package com.nihongo_deb.KMeans;
 
 import org.apache.commons.math3.util.Pair;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.*;
 
 import static java.lang.Math.*;
@@ -65,11 +62,11 @@ public class KMeansCluster {
         double abscissaMin = elements.get(0).abscissa;
 
         for (Element e : elements){
-            ordinateMax = ordinateMax < e.ordinate ? e.ordinate : ordinateMax;
-            ordinateMin = ordinateMin > e.ordinate ? e.ordinate : ordinateMin;
+            ordinateMax = Math.max(ordinateMax, e.ordinate);
+            ordinateMin = Math.min(ordinateMin, e.ordinate);
 
-            abscissaMax = abscissaMax < e.abscissa ? e.abscissa : abscissaMax;
-            abscissaMin = abscissaMin > e.abscissa ? e.abscissa : abscissaMin;
+            abscissaMax = Math.max(abscissaMax, e.abscissa);
+            abscissaMin = Math.min(abscissaMin, e.abscissa);
         }
 
         for (int i = 0; i < clustersNumber; i ++) {
@@ -158,17 +155,8 @@ public class KMeansCluster {
     private double farthestComrade(Element element){
         double maxDistance = 0.0;
 
-//        for (Element e : clusters.get(element.colorIndex)){
-//            double currentDist = distanceBetweenTwoElements(element, e);
-//            if(maxDistance < currentDist){
-//                maxDistance = currentDist;
-//            }
-//        }
-
-        ArrayList<Element> oneCluster = clusters.get(element.colorIndex);
-
-        for (int elIndex = 0; elIndex < clusters.size(); elIndex++){
-            double currentDist = distanceBetweenTwoElements(element, oneCluster.get(elIndex));
+        for (Element e : clusters.get(element.colorIndex)){
+            double currentDist = distanceBetweenTwoElements(element, e);
             if(maxDistance < currentDist){
                 maxDistance = currentDist;
             }
@@ -177,59 +165,54 @@ public class KMeansCluster {
         return maxDistance;
     }
 
-    public void submitThreads(int threadNum, ExecutorService executorService) throws ExecutionException, InterruptedException {
-
-
-
-    }
-
-    public Pair<Double, Long> findCSIndex(int threadNum, ExecutorService executorService) throws InterruptedException, ExecutionException {
+    public Pair<Double, Long> findCSIndex(int threadNum) throws InterruptedException, ExecutionException {
         double numerator = 0.0;
         double denominator = 0.0;
 
-        ArrayList<Double> partsOfNumerator = new ArrayList<>(threadNum);
-        for (int partIndex = 0; partIndex < threadNum; partIndex++) {
-            partsOfNumerator.add(0.0);
-        }
+        double [] partsOfNumerator = new double[threadNum];
+        Arrays.fill(partsOfNumerator, 0.0);
 
-        //ArrayList<Future<?>> futures = new ArrayList<>(threadNum);
-        ArrayList<Callable<Integer>> callables = new ArrayList<>(threadNum);
+        ExecutorService executorService = Executors.newFixedThreadPool(threadNum);
+        CountDownLatch startLatch = new CountDownLatch(threadNum);
+        CountDownLatch endLatch = new CountDownLatch(threadNum);
 
-        long startTime = System.nanoTime();
-
+        long before = 0;
         for (int threadIndex = 0; threadIndex < threadNum; threadIndex++){
-            callables.add(new CSIndexRunner(threadNum, threadIndex, partsOfNumerator));
+            executorService.submit(new CSIndexRunner(threadNum, threadIndex, partsOfNumerator, startLatch, endLatch));
+            if (threadIndex == threadNum - 1){
+                before = System.nanoTime();
+            }
         }
 
-        List<Future<Integer>> futures = executorService.invokeAll(callables);
+        endLatch.await();
+        long after = System.nanoTime();
 
-        for (Future<?> f : futures){
-            f.get();
-        }
+        executorService.shutdown();
+        executorService.awaitTermination(1, TimeUnit.HOURS);
+
+        long elapseTime = after - before;
 
         for (Double d : partsOfNumerator) {
             numerator += d;
         }
 
         for (int clusterIndex = 0; clusterIndex < clustersNumber; clusterIndex++){
-            double maxDist = 0.0;
+            double minDist = Double.MAX_VALUE;
             for (Element c1 : centers){
                 for (Element c2 : centers){
                     double currentDist = distanceBetweenTwoElements(c1, c2);
-                    if (maxDist < currentDist){
-                        maxDist = currentDist;
+                    if (minDist > currentDist && c1 != c2){
+                        minDist = currentDist;
                     }
                 }
             }
-            denominator += maxDist;
+            denominator += minDist;
         }
 
-        //System.out.println(partsOfNumerator);
-
         double result = numerator / denominator;
-        long endTime = System.nanoTime();
-        return new Pair<>(result, endTime - startTime);
+        return new Pair<Double, Long>(result, elapseTime);
     }
+
     public List<Element> getElements() {
         return elements;
     }
@@ -254,20 +237,31 @@ public class KMeansCluster {
         this.centers = centers;
     }
 
-    private class CSIndexRunner implements Callable<Integer> {
+    private class CSIndexRunner implements Runnable {
+        private CountDownLatch startLatch;
+        private CountDownLatch endLatch;
         private int threadNum;
         private int threadIndex;
-        private List<Double> partsOfNumerator;
+        private double [] partsOfNumerator;
         private double sum = 0.0;
 
-        public CSIndexRunner(int threadNum, int threadIndex, List<Double> partsOfNumerator){
+        public CSIndexRunner(int threadNum, int threadIndex, double [] partsOfNumerator, CountDownLatch startLatch, CountDownLatch endLatch){
             this.threadIndex = threadIndex;
             this.threadNum = threadNum;
             this.partsOfNumerator = partsOfNumerator;
+            this.startLatch = startLatch;
+            this.endLatch = endLatch;
         }
 
         @Override
-        public Integer call() {
+        public void run() {
+            startLatch.countDown();
+            try {
+                startLatch.await();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
             if (threadIndex == 0){
                 for (int elIndex = 0; elIndex < elements.size() / threadNum; elIndex++){
                     sum += farthestComrade(elements.get(elIndex));
@@ -284,8 +278,8 @@ public class KMeansCluster {
                 }
             }
 
-            partsOfNumerator.set(threadIndex, sum);
-            return 0;
+            partsOfNumerator[threadIndex] = sum;
+            endLatch.countDown();
         }
     }
 }
