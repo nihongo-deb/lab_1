@@ -1,5 +1,7 @@
 package com.nihongo_deb.KMeans;
 
+import org.apache.commons.math3.util.Pair;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -22,8 +24,6 @@ public class KMeansCluster {
     private ArrayList<ArrayList<Element>> clusters;
     // центры
     private List<Element> centers;
-    //
-    private List<Double> partsOfNumerator;
 
     public KMeansCluster(CSVDataLoader csvDataLoader, int clustersNumber){
         this.elements = csvDataLoader.getElements();
@@ -178,31 +178,34 @@ public class KMeansCluster {
     }
 
     public void submitThreads(int threadNum, ExecutorService executorService) throws ExecutionException, InterruptedException {
-        this.partsOfNumerator = new ArrayList<>();
-        for (int partIndex = 0; partIndex < threadNum; partIndex++) {
-            partsOfNumerator.add(0.0);
-        }
 
-//        executorService = Executors.newFixedThreadPool(threadNum);
-
-        ArrayList<Future<?>> futures = new ArrayList<>();
-        for (int threadIndex = 0; threadIndex < threadNum; threadIndex++){
-            futures.add(executorService.submit(new CSIndexRunner(threadNum, threadIndex, partsOfNumerator)));
-        }
-
-        for (Future<?> f : futures){
-            f.get();
-        }
 
 
     }
 
-    public double findCSIndex() throws InterruptedException {
+    public Pair<Double, Long> findCSIndex(int threadNum, ExecutorService executorService) throws InterruptedException, ExecutionException {
         double numerator = 0.0;
         double denominator = 0.0;
 
-        executorService.shutdown();
-        executorService.awaitTermination(1, TimeUnit.HOURS);
+        ArrayList<Double> partsOfNumerator = new ArrayList<>(threadNum);
+        for (int partIndex = 0; partIndex < threadNum; partIndex++) {
+            partsOfNumerator.add(0.0);
+        }
+
+        //ArrayList<Future<?>> futures = new ArrayList<>(threadNum);
+        ArrayList<Callable<Integer>> callables = new ArrayList<>(threadNum);
+
+        long startTime = System.nanoTime();
+
+        for (int threadIndex = 0; threadIndex < threadNum; threadIndex++){
+            callables.add(new CSIndexRunner(threadNum, threadIndex, partsOfNumerator));
+        }
+
+        List<Future<Integer>> futures = executorService.invokeAll(callables);
+
+        for (Future<?> f : futures){
+            f.get();
+        }
 
         for (Double d : partsOfNumerator) {
             numerator += d;
@@ -221,8 +224,11 @@ public class KMeansCluster {
             denominator += maxDist;
         }
 
-        System.out.println(partsOfNumerator);
-        return numerator / denominator;
+        //System.out.println(partsOfNumerator);
+
+        double result = numerator / denominator;
+        long endTime = System.nanoTime();
+        return new Pair<>(result, endTime - startTime);
     }
     public List<Element> getElements() {
         return elements;
@@ -248,7 +254,7 @@ public class KMeansCluster {
         this.centers = centers;
     }
 
-    private class CSIndexRunner implements Runnable{
+    private class CSIndexRunner implements Callable<Integer> {
         private int threadNum;
         private int threadIndex;
         private List<Double> partsOfNumerator;
@@ -261,7 +267,7 @@ public class KMeansCluster {
         }
 
         @Override
-        public void run() {
+        public Integer call() {
             if (threadIndex == 0){
                 for (int elIndex = 0; elIndex < elements.size() / threadNum; elIndex++){
                     sum += farthestComrade(elements.get(elIndex));
@@ -279,6 +285,7 @@ public class KMeansCluster {
             }
 
             partsOfNumerator.set(threadIndex, sum);
+            return 0;
         }
     }
 }

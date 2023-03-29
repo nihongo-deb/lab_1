@@ -2,9 +2,11 @@ package com.nihongo_deb.ManualTests;
 
 import com.nihongo_deb.KMeans.CSVDataLoader;
 import com.nihongo_deb.KMeans.KMeansCluster;
-import com.opencsv.exceptions.CsvException;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author KAWAIISHY
@@ -12,7 +14,7 @@ import java.io.IOException;
  * @created 12.03.2023
  */
 public class TestCSV {
-    public static void main(String[] args) throws IOException, CsvException, InterruptedException {
+    public static void main(String[] args) throws Exception {
         CSVDataLoader data = new CSVDataLoader("BD-Patients.csv", 37, 117);
 //        data.writeElementsInTXT("foundData.txt");
 
@@ -45,14 +47,24 @@ public class TestCSV {
         long after;
         System.out.println();
 
-        for (int i = 1; i < 30; i ++){
-            cluster.submitThreads(i);
+        for (int i = 12; i <= 12; i ++){
+            ExecutorService es = Executors.newFixedThreadPool(i);
 
-            before = System.nanoTime();
-            cluster.findCSIndex();
-            after = System.nanoTime();
+            // Warm-up
+            for (int j = 0; j < 10; j++) {
+                cluster.findCSIndex(i, es);
+            }
 
-            System.out.println("Elapsed time for " + i + " threads:\n" + (after - before) + "\n");
+            long time = 0;
+            for (int j = 0; j < 100000; j++) {
+                var res = cluster.findCSIndex(i, es);
+                time += res.getValue();
+            }
+
+            System.out.println("Elapsed time for " + i + " threads:\n" + (time / 100000) + "\n");
+
+            es.shutdown();
+            es.awaitTermination(1, TimeUnit.DAYS);
         }
 
 
