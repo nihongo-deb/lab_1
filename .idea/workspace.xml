@@ -6,8 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="632f854d-eaab-4bd5-afea-a2f4a91828c6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/Element.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/Element.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/KMeansCluster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/KMeansCluster.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ManualTests/TestCSV.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ManualTests/TestCSV.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +53,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;full.screen.before.presentation.mode&quot;: &quot;false&quot;,
     &quot;last_opened_file_path&quot;: &quot;F:/Projects/Multithreading programming/lab_1&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -88,7 +89,7 @@
       <command value="mvn clean install" />
     </option>
   </component>
-  <component name="RunManager" selected="Application.Edutest">
+  <component name="RunManager" selected="Application.TestCSV">
     <configuration name="CSV_JavaFX" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.nihongo_deb.CSV_JavaFX" />
       <module name="lab_1" />
@@ -165,9 +166,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.TestCSV" />
         <item itemvalue="Application.Edutest" />
         <item itemvalue="Application.Main" />
-        <item itemvalue="Application.TestCSV" />
         <item itemvalue="Application.CSV_JavaFX" />
         <item itemvalue="Application.Javafx" />
       </list>
@@ -240,7 +241,11 @@
       <workItem from="1679732114857" duration="10638000" />
       <workItem from="1679832268882" duration="3794000" />
       <workItem from="1679841045553" duration="859000" />
-      <workItem from="1679994655423" duration="4464000" />
+      <workItem from="1679994655423" duration="6112000" />
+      <workItem from="1680001440063" duration="1708000" />
+      <workItem from="1680012491083" duration="752000" />
+      <workItem from="1680028181760" duration="519000" />
+      <workItem from="1680074645084" duration="1341000" />
     </task>
     <servers />
   </component>

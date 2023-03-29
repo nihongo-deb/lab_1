@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 import static java.lang.Math.*;
 
@@ -21,9 +19,11 @@ public class KMeansCluster {
     // кол-во кластеров (= кол-ву центров)
     private int clustersNumber;
     // кластеры
-    private List<List<Element>> clusters;
+    private ArrayList<ArrayList<Element>> clusters;
     // центры
     private List<Element> centers;
+    //
+    private List<Double> partsOfNumerator;
 
     public KMeansCluster(CSVDataLoader csvDataLoader, int clustersNumber){
         this.elements = csvDataLoader.getElements();
@@ -145,7 +145,7 @@ public class KMeansCluster {
         return index;
     }
 
-    private double distanceBetweenTwoElements(Element el1, Element el2){
+    private static double distanceBetweenTwoElements(Element el1, Element el2){
         double distance =
                 sqrt(
                         pow(abs(el1.abscissa - el2.abscissa), 2) +
@@ -158,8 +158,17 @@ public class KMeansCluster {
     private double farthestComrade(Element element){
         double maxDistance = 0.0;
 
-        for (Element e : clusters.get(element.colorIndex)){
-            double currentDist = distanceBetweenTwoElements(element, e);
+//        for (Element e : clusters.get(element.colorIndex)){
+//            double currentDist = distanceBetweenTwoElements(element, e);
+//            if(maxDistance < currentDist){
+//                maxDistance = currentDist;
+//            }
+//        }
+
+        ArrayList<Element> oneCluster = clusters.get(element.colorIndex);
+
+        for (int elIndex = 0; elIndex < clusters.size(); elIndex++){
+            double currentDist = distanceBetweenTwoElements(element, oneCluster.get(elIndex));
             if(maxDistance < currentDist){
                 maxDistance = currentDist;
             }
@@ -168,20 +177,29 @@ public class KMeansCluster {
         return maxDistance;
     }
 
-    public double findCSIndex(int threadNum) throws InterruptedException {
-        List<Double> partsOfNumerator = new ArrayList<>();
-        double numerator = 0.0;
-        double denominator = 0.0;
-
+    public void submitThreads(int threadNum, ExecutorService executorService) throws ExecutionException, InterruptedException {
+        this.partsOfNumerator = new ArrayList<>();
         for (int partIndex = 0; partIndex < threadNum; partIndex++) {
             partsOfNumerator.add(0.0);
         }
 
-        ExecutorService executorService = Executors.newFixedThreadPool(threadNum);
+//        executorService = Executors.newFixedThreadPool(threadNum);
 
+        ArrayList<Future<?>> futures = new ArrayList<>();
         for (int threadIndex = 0; threadIndex < threadNum; threadIndex++){
-            executorService.submit(new CSIndexRunner(threadNum, threadIndex, partsOfNumerator));
+            futures.add(executorService.submit(new CSIndexRunner(threadNum, threadIndex, partsOfNumerator)));
         }
+
+        for (Future<?> f : futures){
+            f.get();
+        }
+
+
+    }
+
+    public double findCSIndex() throws InterruptedException {
+        double numerator = 0.0;
+        double denominator = 0.0;
 
         executorService.shutdown();
         executorService.awaitTermination(1, TimeUnit.HOURS);
@@ -203,6 +221,7 @@ public class KMeansCluster {
             denominator += maxDist;
         }
 
+        System.out.println(partsOfNumerator);
         return numerator / denominator;
     }
     public List<Element> getElements() {
@@ -213,11 +232,11 @@ public class KMeansCluster {
         this.elements = elements;
     }
 
-    public List<List<Element>> getClusters() {
+    public ArrayList<ArrayList<Element>> getClusters() {
         return clusters;
     }
 
-    public void setClusters(List<List<Element>> clusters) {
+    public void setClusters(ArrayList<ArrayList<Element>> clusters) {
         this.clusters = clusters;
     }
 
@@ -249,11 +268,11 @@ public class KMeansCluster {
                 }
             } else {
                 if (threadIndex == threadNum - 1){
-                    for (int elIndex = elements.size() / threadIndex; elIndex < elements.size(); elIndex++){
+                    for (int elIndex = elements.size() * threadIndex / threadNum; elIndex < elements.size(); elIndex++){
                         sum += farthestComrade(elements.get(elIndex));
                     }
                 } else {
-                    for (int elIndex = elements.size() / threadIndex; elIndex < elements.size() / (elIndex + 1); elIndex++){
+                    for (int elIndex = elements.size() * threadIndex / threadNum; elIndex < elements.size() * (threadIndex + 1) / threadNum; elIndex++){
                         sum += farthestComrade(elements.get(elIndex));
                     }
                 }
