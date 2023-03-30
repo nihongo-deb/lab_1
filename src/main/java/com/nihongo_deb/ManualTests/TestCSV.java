@@ -14,7 +14,7 @@ public class TestCSV {
         CSVDataLoader data = new CSVDataLoader("BD-Patients.csv", 37, 117);
 //        data.writeElementsInTXT("foundData.txt");
 
-        int clusterNumber = 5;
+        int clusterNumber = 4;
         KMeansCluster cluster = new KMeansCluster(data, clusterNumber);
 
         for (int cl = 0; cl < 30; cl ++) {
@@ -37,15 +37,16 @@ public class TestCSV {
         System.out.println("##########################################");
         System.out.println("########################################## \n");
 
-        for (int threadNum = 1; threadNum < 50; threadNum++){
+        for (int threadNum = 1; threadNum < 9; threadNum++){
             System.out.println("Thread num: " + threadNum);
             for (int warmUpIter = 0; warmUpIter < 1000; warmUpIter++)
-                cluster.findCSIndex(1);
+                cluster.findCSIndex(threadNum);
 
-            Pair<Double, Long> pair = cluster.findCSIndex(1);
+            Pair<Double, Long> pair = cluster.findCSIndex(threadNum);
 
 //            System.out.println("Result: " + pair.getKey());
             System.out.println("Elapse time: " + pair.getValue());
+            System.out.println("CS-index: " + pair.getKey());
             System.out.println("- - - -");
         }
 

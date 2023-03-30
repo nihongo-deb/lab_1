@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="632f854d-eaab-4bd5-afea-a2f4a91828c6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/CSVDataLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/CSVDataLoader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/KMeansCluster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/KMeansCluster.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/KMeansPrinter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/KMeansPrinter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ManualTests/TestCSV.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ManualTests/TestCSV.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -25,6 +27,10 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="jar://C:/Program Files/Java/jdk-15.0.2/lib/src.zip!/java.base/java/util/concurrent/CountDownLatch.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://C:/Program Files/Java/jdk-15.0.2/lib/src.zip!/java.base/java/util/concurrent/ExecutorService.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://C:/Program Files/Java/jdk-15.0.2/lib/src.zip!/java.desktop/java/awt/geom/Line2D.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://C:/Program Files/Java/jdk-15.0.2/lib/src.zip!/java.desktop/javax/swing/JComponent.java" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/.jdks/openjdk-17.0.2/lib/src.zip!/java.base/java/util/LinkedList.java" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/.jdks/openjdk-17.0.2/lib/src.zip!/java.base/java/util/List.java" root0="SKIP_INSPECTION" />
   </component>
@@ -89,7 +95,7 @@
       <command value="mvn clean install" />
     </option>
   </component>
-  <component name="RunManager" selected="Application.TestCSV">
+  <component name="RunManager" selected="Application.TestDraw">
     <configuration name="CSV_JavaFX" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.nihongo_deb.CSV_JavaFX" />
       <module name="lab_1" />
@@ -109,19 +115,6 @@
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.nihongo_deb.ManualTests.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Javafx" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.nihongo_deb.Javafx" />
-      <module name="lab_1" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.nihongo_deb.KMeens.Graph.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -157,20 +150,33 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="TestDraw" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.nihongo_deb.ManualTests.TestDraw" />
+      <module name="lab_1" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.nihongo_deb.ManualTests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
+      <item itemvalue="Application.TestDraw" />
       <item itemvalue="Application.Edutest" />
       <item itemvalue="Application.TestCSV" />
       <item itemvalue="Application.CSV_JavaFX" />
-      <item itemvalue="Application.Javafx" />
       <item itemvalue="Application.Main" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.TestDraw" />
         <item itemvalue="Application.TestCSV" />
         <item itemvalue="Application.Edutest" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.CSV_JavaFX" />
-        <item itemvalue="Application.Javafx" />
       </list>
     </recent_temporary>
   </component>
@@ -245,7 +251,13 @@
       <workItem from="1680001440063" duration="1708000" />
       <workItem from="1680012491083" duration="752000" />
       <workItem from="1680028181760" duration="519000" />
-      <workItem from="1680074645084" duration="1341000" />
+      <workItem from="1680074645084" duration="2445000" />
+      <workItem from="1680091787779" duration="2451000" />
+      <workItem from="1680094637176" duration="864000" />
+      <workItem from="1680110792117" duration="2962000" />
+      <workItem from="1680167206669" duration="3673000" />
+      <workItem from="1680170895540" duration="2844000" />
+      <workItem from="1680177590478" duration="5047000" />
     </task>
     <servers />
   </component>

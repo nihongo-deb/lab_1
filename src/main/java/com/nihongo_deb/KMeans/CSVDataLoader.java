@@ -85,21 +85,24 @@ public class CSVDataLoader {
                         Double.parseDouble(this.allCSV.get(csv)[ordinateIndex]),
                         Double.parseDouble(this.allCSV.get(csv)[abscissaIndex]));
 
-                this.ordinateMax = currentElement.ordinate > this.ordinateMax ? currentElement.ordinate : this.ordinateMax;
-                this.ordinateMin = currentElement.ordinate < this.ordinateMin ? currentElement.ordinate : this.ordinateMin;
+                this.ordinateMax = Math.max(currentElement.ordinate, this.ordinateMax);
+                this.ordinateMin = Math.min(currentElement.ordinate, this.ordinateMin);
 
-                this.abscissaMax = currentElement.abscissa > this.abscissaMax ? currentElement.abscissa : this.abscissaMax;
-                this.abscissaMin = currentElement.abscissa > this.abscissaMin ? currentElement.abscissa : this.abscissaMin;
+                this.abscissaMax = Math.max(currentElement.abscissa, this.abscissaMax);
+                this.abscissaMin = Math.min(currentElement.abscissa, this.abscissaMin);
 
                 this.elements.add(currentElement);
             }
         }
-        elements.replaceAll(doubleElement -> new Element(doubleElement.abscissa / abscissaMax, doubleElement.ordinate / ordinateMax));
+        elements.replaceAll(doubleElement -> new Element(
+                (doubleElement.abscissa - abscissaMin) / (abscissaMax - abscissaMin),
+                (doubleElement.ordinate - ordinateMin) / (ordinateMax - ordinateMin)
+        ));
     }
 
     public void printElements(){
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(allCSV.get(0)[ordinateIndex]).append(' ').append(allCSV.get(0)[abscissaIndex]).append("\n");
+//        stringBuilder.append(allCSV.get(0)[ordinateIndex]).append(' ').append(allCSV.get(0)[abscissaIndex]).append("\n");
 
         for (Element e : elements){
             stringBuilder.append(e.ordinate).append(' ').append(e.abscissa).append("\n");

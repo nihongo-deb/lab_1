@@ -180,12 +180,12 @@ public class KMeansCluster {
         for (int threadIndex = 0; threadIndex < threadNum; threadIndex++){
             executorService.submit(new CSIndexRunner(threadNum, threadIndex, partsOfNumerator, startLatch, endLatch));
             if (threadIndex == threadNum - 1){
-                before = System.nanoTime();
+                before = System.currentTimeMillis();
             }
         }
 
         endLatch.await();
-        long after = System.nanoTime();
+        long after = System.currentTimeMillis();
 
         executorService.shutdown();
         executorService.awaitTermination(1, TimeUnit.HOURS);
@@ -246,8 +246,8 @@ public class KMeansCluster {
         private double sum = 0.0;
 
         public CSIndexRunner(int threadNum, int threadIndex, double [] partsOfNumerator, CountDownLatch startLatch, CountDownLatch endLatch){
-            this.threadIndex = threadIndex;
             this.threadNum = threadNum;
+            this.threadIndex = threadIndex;
             this.partsOfNumerator = partsOfNumerator;
             this.startLatch = startLatch;
             this.endLatch = endLatch;
