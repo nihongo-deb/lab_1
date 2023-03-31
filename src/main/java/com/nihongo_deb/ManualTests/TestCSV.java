@@ -1,6 +1,6 @@
 package com.nihongo_deb.ManualTests;
 
-import com.nihongo_deb.KMeans.CSVDataLoader;
+import com.nihongo_deb.KMeans.KMeansCSVDataLoader;
 import com.nihongo_deb.KMeans.KMeansCluster;
 import org.apache.commons.math3.util.Pair;
 
@@ -11,20 +11,14 @@ import org.apache.commons.math3.util.Pair;
  */
 public class TestCSV {
     public static void main(String[] args) throws Exception {
-        CSVDataLoader data = new CSVDataLoader("BD-Patients.csv", 37, 117);
-//        data.writeElementsInTXT("foundData.txt");
+        KMeansCSVDataLoader data = new KMeansCSVDataLoader("BD-Patients.csv", 37, 117);
 
         int clusterNumber = 4;
         KMeansCluster cluster = new KMeansCluster(data, clusterNumber);
 
         for (int cl = 0; cl < 30; cl ++) {
             for (int i = 0; i < clusterNumber; i++) {
-//                System.out.println("-------------------");
                 System.out.println("<<< CLUSTER №" + i + " " + cluster.getClusters().get(i).size() + " " + cluster.getCenters().get(i).abscissa + "\t" + cluster.getCenters().get(i).ordinate + " >>>");
-//                for (Element e : cluster.getClusters().get(i)){
-//                    System.out.println(e.abscissa + "\t\t\t" + e.ordinate);
-//                }
-//                System.out.println("-------------------");
             }
             cluster.doClustering();
             System.out.println("\n##########################################\n");
@@ -44,7 +38,6 @@ public class TestCSV {
 
             Pair<Double, Long> pair = cluster.findCSIndex(threadNum);
 
-//            System.out.println("Result: " + pair.getKey());
             System.out.println("Elapse time: " + pair.getValue());
             System.out.println("CS-index: " + pair.getKey());
             System.out.println("- - - -");

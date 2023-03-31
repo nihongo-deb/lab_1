@@ -22,7 +22,7 @@ public class KMeansCluster {
     // центры
     private List<Element> centers;
 
-    public KMeansCluster(CSVDataLoader csvDataLoader, int clustersNumber){
+    public KMeansCluster(KMeansCSVDataLoader csvDataLoader, int clustersNumber){
         this.elements = csvDataLoader.getElements();
         Collections.sort(elements);
 
@@ -33,7 +33,7 @@ public class KMeansCluster {
         initCenters();
     }
 
-    public KMeansCluster(CSVDataLoader csvDataLoader, int clustersNumber, int elementsNumber){
+    public KMeansCluster(KMeansCSVDataLoader csvDataLoader, int clustersNumber, int elementsNumber){
         this.elements = new ArrayList<>();
         this.clustersNumber = clustersNumber;
         this.clusters = new ArrayList<>();
@@ -235,6 +235,10 @@ public class KMeansCluster {
 
     public void setCenters(List<Element> centers) {
         this.centers = centers;
+    }
+
+    public int getClustersNumber() {
+        return clustersNumber;
     }
 
     private class CSIndexRunner implements Runnable {
