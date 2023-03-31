@@ -321,11 +321,31 @@ public class KMeansCluster {
      * (пояснение - каждый элемент уже 'знает', в каком кластере он находится, и хранит в себе эту информацию)
      */
     private class CSIndexRunner implements Runnable {
+        /**
+         * Защелка для одномоментного старта потоков
+         */
         private CountDownLatch startLatch;
+        /**
+         * Защелка, для перехода к join-у
+         */
         private CountDownLatch endLatch;
+        /**
+         * Количество потоков, которые будут запущены в один момент времени
+         */
         private int threadNum;
+        /**
+         * Индекс текущего потока
+         */
         private int threadIndex;
+        /**
+         * Ссылка на массив, в котором будут храниться части подсчетов каждого из потоков.
+         * Размер массива рамен {@link CSIndexRunner#threadNum}.
+         * Индекс ячейки для записи для текущего потока равен {@link CSIndexRunner#threadIndex}
+         */
         private double [] partsOfNumerator;
+        /**
+         * Подсчет текущего потока (1/{@link CSIndexRunner#threadNum} часть слагаемых числителя)
+         */
         private double sum = 0.0;
 
         public CSIndexRunner(int threadNum, int threadIndex, double [] partsOfNumerator, CountDownLatch startLatch, CountDownLatch endLatch){
