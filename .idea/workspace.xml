@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="632f854d-eaab-4bd5-afea-a2f4a91828c6" name="Changes" comment="" />
+    <list default="true" id="632f854d-eaab-4bd5-afea-a2f4a91828c6" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/Element.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/Element.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -257,6 +259,7 @@
       <workItem from="1680197051842" duration="2951000" />
       <workItem from="1680232908946" duration="3073000" />
       <workItem from="1680243067942" duration="8337000" />
+      <workItem from="1680278072949" duration="1905000" />
     </task>
     <servers />
   </component>
