@@ -6,11 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="632f854d-eaab-4bd5-afea-a2f4a91828c6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/CSVDataLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/KMeansCSVDataLoader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/KMeansCluster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/KMeansCluster.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/KMeansPrinter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/KMeansPrinter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ManualTests/TestCSV.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ManualTests/TestCSV.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ManualTests/TestDraw.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ManualTests/TestDraw.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -263,7 +259,7 @@
       <workItem from="1680185981083" duration="2985000" />
       <workItem from="1680197051842" duration="2951000" />
       <workItem from="1680232908946" duration="3073000" />
-      <workItem from="1680243067942" duration="3310000" />
+      <workItem from="1680243067942" duration="5441000" />
     </task>
     <servers />
   </component>

@@ -12,16 +12,47 @@ import static java.lang.Math.*;
  * @project lab_1
  * @created 24.03.2023
  */
+
+/**
+ * Класс для кластеризации данных методом К-средних и многопоточного расчета CS-индекса.
+ * Данные берутся из объекта класса {@link KMeansCSVDataLoader} и кластеризуются методом {@link KMeansCluster#doClustering()}.
+ * <br>
+ * <br>
+ * Для проведения тестов центроиды изначально инициализируются не случайным образом, а занимают позицию определённого элемента.
+ * Алгоритм первой инициализации центроид завязан на расстоянии элемента от начала координат (0.0; 0.0).
+ * <br>
+ * <br>
+ * Каждый прокластеризованный элемент 'понимает', к какому кластеру он относится по присвоенному 'цвету',
+ * который соответствует определённому кластеру {@link Element#colorIndex}
+ */
 public class KMeansCluster {
-    // элементы из CSV - файла
+    /**
+     * Список элементов, полученные из объекта класса {@link KMeansCSVDataLoader}
+     */
     private List<Element> elements;
-    // кол-во кластеров (= кол-ву центров)
+    /**
+     * Количество кластеров
+     */
     private int clustersNumber;
-    // кластеры
+    /**
+     * Список кластеров
+     */
     private ArrayList<ArrayList<Element>> clusters;
-    // центры
+    /**
+     * Список центроид
+     */
     private List<Element> centers;
 
+    /**
+     * <h2>Конструктор</h2>
+     * Этапы конструктора:
+     * <br>
+     * <ul>
+     *     <li> Получает ссылку на список отмасштабированных элементов из объекта класса {@link KMeansCSVDataLoader}
+     *     <li> Сортирует элементы по возрастанию расстояния от начала координат
+     *     <li> Инициализирует центроиды методом {@link KMeansCluster#initCenters()}
+     * </ul>
+     */
     public KMeansCluster(KMeansCSVDataLoader csvDataLoader, int clustersNumber){
         this.elements = csvDataLoader.getElements();
         Collections.sort(elements);
@@ -32,20 +63,27 @@ public class KMeansCluster {
 
         initCenters();
     }
-
+    /**
+     * <h2>Конструктор</h2>
+     * Этапы конструктора:
+     * <br>
+     * <ul>
+     *     <li> Получает ссылку на определённое количество ({@code elementsNumber}) элементов из объекта класса
+     *     {@link KMeansCSVDataLoader}
+     *     <li> Сортирует элементы по возрастанию расстояния от начала координат
+     *     <li> Инициализирует центроиды методом {@link KMeansCluster#initCenters()}
+     * </ul>
+     */
     public KMeansCluster(KMeansCSVDataLoader csvDataLoader, int clustersNumber, int elementsNumber){
         this.elements = new ArrayList<>();
         this.clustersNumber = clustersNumber;
         this.clusters = new ArrayList<>();
         this.centers = new ArrayList<>();
 
-
         int csvDataLoaderSize = csvDataLoader.elementsSize();
-        Random random = new Random();
         int index = 0;
         while (elements.size() < elementsNumber){
             elements.add(csvDataLoader.getElements().get(index));
-//            index += random.nextInt(csvDataLoaderSize / elementsNumber - 1) + 1;
             index += csvDataLoaderSize / elementsNumber;
         }
 
@@ -54,8 +92,13 @@ public class KMeansCluster {
         initCenters();
     }
 
+    /**
+     *  Приватный метод для инициализации цетроид кластеров.
+     *  Центороиды рассчитываются относительно удалённости элементов от центра.
+     *  Поэтому перед этим в конструкторах предварительно были отсортированы элементы
+     *  по удалённости их от начала координат.
+     */
     private void initCenters(){
-        Random random = new Random();
         double ordinateMax = elements.get(0).ordinate;
         double ordinateMin = elements.get(0).ordinate;
         double abscissaMax = elements.get(0).abscissa;
@@ -71,17 +114,6 @@ public class KMeansCluster {
 
         for (int i = 0; i < clustersNumber; i ++) {
             clusters.add(new ArrayList<Element>());
-//            centers.add(new Element(
-//                    abscissaMin + (abscissaMax - abscissaMin) * random.nextDouble(),
-//                    ordinateMin + (ordinateMax - ordinateMin) * random.nextDouble(),
-//                    i
-//            ));
-
-//            centers.add(new Element(
-//                    abscissaMax * i / clustersNumber,
-//                    ordinateMax * i / clustersNumber,
-//                    i
-//            ));
             centers.add(new Element(
                     elements.get((elements.size() - 1) / (i + 1)).abscissa,
                     elements.get((elements.size() - 1) / (i + 1)).ordinate,
@@ -90,6 +122,9 @@ public class KMeansCluster {
         }
     }
 
+    /**
+     * Метод кластеризации методом К-средих
+     */
     public void doClustering(){
         for (int i = 0; i < clustersNumber; i++){
             clusters.get(i).clear();
@@ -104,6 +139,9 @@ public class KMeansCluster {
         calculateCenters();
     }
 
+    /**
+     * Метод перерасчета центроид у сформированных кластеров.
+     */
     private void calculateCenters(){
         double averageAbscissa;
         double averageOrdinate;
@@ -124,6 +162,9 @@ public class KMeansCluster {
         }
     }
 
+    /**
+     * Метод определения к какой центроиде элемент находится ближе всего (присвоение его к определённому кластеру).
+     */
     private int findNearestCenters(Element element){
         double minLength = Double.MAX_VALUE;
         int index = 0;
@@ -142,6 +183,14 @@ public class KMeansCluster {
         return index;
     }
 
+    /**
+     * Метод расчета расстояния между элементами.
+     * <br>
+     * Используется в методах:
+     * @see KMeansCluster#farthestComrade
+     * @see KMeansCluster#findCSIndex
+     * @return расстояние между элементами
+     */
     private static double distanceBetweenTwoElements(Element el1, Element el2){
         double distance =
                 sqrt(
@@ -152,6 +201,14 @@ public class KMeansCluster {
         return distance;
     }
 
+    /**
+     * Метод для расчета максимального расстояния для текущего элемента до элемента,
+     * находящегося в том-же кластере. (одно из слагаемых для расчета числителя CS-индекса)
+     * <br>
+     * @see KMeansCluster#distanceBetweenTwoElements
+     * @param element относительно какого элемента производится расчет
+     * @return расстояние до максимальноудалённого элемента
+     */
     private double farthestComrade(Element element){
         double maxDistance = 0.0;
 
@@ -165,18 +222,29 @@ public class KMeansCluster {
         return maxDistance;
     }
 
+    /**
+     * Метод для расчета CS-индекса. Многопоточный расчет используется только для расчета числителя индекса.
+     * @param threadNum количество потоков, которые будут рассчитывать этот индекс
+     * @return Pair.key - значение CS-индекса <br>
+     *         Pair.value - время(в наносекундах затраченное на расчет)
+     */
     public Pair<Double, Long> findCSIndex(int threadNum) throws InterruptedException, ExecutionException {
         double numerator = 0.0;
         double denominator = 0.0;
 
+        // каждый элемент массива 'принадлежит' определённому потоку
+        // после в конце выполнения каждого потока, элементы будут просумированы
+        // сумма элементов будет равна числителю CS-индекса
         double [] partsOfNumerator = new double[threadNum];
         Arrays.fill(partsOfNumerator, 0.0);
 
+        // пул потоков
         ExecutorService executorService = Executors.newFixedThreadPool(threadNum);
-        CountDownLatch startLatch = new CountDownLatch(threadNum);
-        CountDownLatch endLatch = new CountDownLatch(threadNum);
+        CountDownLatch startLatch = new CountDownLatch(threadNum); // защелка, для одновременного начала расчета
+        CountDownLatch endLatch = new CountDownLatch(threadNum); // защелка, возвращения в мастер-поток
 
         long before = 0;
+        //цикл присвоения 'потоку' своей задачи
         for (int threadIndex = 0; threadIndex < threadNum; threadIndex++){
             executorService.submit(new CSIndexRunner(threadNum, threadIndex, partsOfNumerator, startLatch, endLatch));
             if (threadIndex == threadNum - 1){
@@ -184,7 +252,7 @@ public class KMeansCluster {
             }
         }
 
-        endLatch.await();
+        endLatch.await(); // ожидание исполнения всех потоков в мастер-потоке
         long after = System.currentTimeMillis();
 
         executorService.shutdown();
@@ -192,10 +260,12 @@ public class KMeansCluster {
 
         long elapseTime = after - before;
 
+        // сумируем расчет каждого из потоков и получаем числитель
         for (Double d : partsOfNumerator) {
             numerator += d;
         }
 
+        // подсчет знаменателя CS-индекса
         for (int clusterIndex = 0; clusterIndex < clustersNumber; clusterIndex++){
             double minDist = Double.MAX_VALUE;
             for (Element c1 : centers){
@@ -241,6 +311,15 @@ public class KMeansCluster {
         return clustersNumber;
     }
 
+    /**
+     * Приватный класс имплементирующий интерфейс {@link Runnable}.
+     * Данный класс используется для многопоточного расчета числителя
+     * CS-индекса в методе {@link KMeansCluster#findCSIndex}
+     *
+     * Объектам данного класса в конструкторе поступает ссылка на все прокластерезованные элементы.
+     * Каждый объект данного класса производит расчет определённого количество слагаемых числителя CS-индекса.
+     * (пояснение - каждый элемент уже 'знает', в каком кластере он находится, и хранит в себе эту информацию)
+     */
     private class CSIndexRunner implements Runnable {
         private CountDownLatch startLatch;
         private CountDownLatch endLatch;
@@ -257,25 +336,30 @@ public class KMeansCluster {
             this.endLatch = endLatch;
         }
 
+        /**
+         * Метод, который будет запускаться в отдельном потоке.
+         * Также данный метод рассчитывает свое количество слагаемых для числителя CS-индекса.
+         */
         @Override
         public void run() {
-            startLatch.countDown();
+            startLatch.countDown(); // декрементирование стартовой защелки
             try {
-                startLatch.await();
+                startLatch.await(); // ожидание 'отпирания' стартовой защелки
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
 
-            if (threadIndex == 0){
+            // циклы подсчета числителей CS-индекса
+            if (threadIndex == 0){ //если это первый поток, то он берёт на себя начальную часть списка элементов
                 for (int elIndex = 0; elIndex < elements.size() / threadNum; elIndex++){
                     sum += farthestComrade(elements.get(elIndex));
                 }
             } else {
-                if (threadIndex == threadNum - 1){
+                if (threadIndex == threadNum - 1){ //если это не крайний поток, то он берёт на себя конечную часть списка элементов
                     for (int elIndex = elements.size() * threadIndex / threadNum; elIndex < elements.size(); elIndex++){
                         sum += farthestComrade(elements.get(elIndex));
                     }
-                } else {
+                } else { //тут всё ок
                     for (int elIndex = elements.size() * threadIndex / threadNum; elIndex < elements.size() * (threadIndex + 1) / threadNum; elIndex++){
                         sum += farthestComrade(elements.get(elIndex));
                     }
@@ -283,7 +367,7 @@ public class KMeansCluster {
             }
 
             partsOfNumerator[threadIndex] = sum;
-            endLatch.countDown();
+            endLatch.countDown(); // декрементирование конечной защелки (её ждёт мастер-поток)
         }
     }
 }
