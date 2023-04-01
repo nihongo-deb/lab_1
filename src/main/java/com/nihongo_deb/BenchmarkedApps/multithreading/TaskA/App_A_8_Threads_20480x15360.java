@@ -35,7 +35,7 @@ public class App_A_8_Threads_20480x15360 {
 
     @TearDown
     public void save() throws IOException {
-        imageCompression.setPixelsFromCopy();
+        imageCompression.writePixelsInImage();
         imageCompression.saveImage( + numThreads + "_threads_neg_comp_" + "gervant_20480x15360");
         imageCompression = null;
     }
