@@ -16,11 +16,22 @@ import java.util.concurrent.TimeUnit;
  * @created 14.02.2023
  */
 public class ImageCompression {
+    /**
+     * Буфер изображения
+     */
     private BufferedImage image;
+    /**
+     * Текущие пиксели изображения.
+     * Для избежания состояния-гонки, из этого массива данные копируются и помещаются в {@link ImageCompression#pixelsCopy}
+     */
     private volatile short [][][] pixels;
+    /**
+     * Слепок пикселей изображения, который будет изменяться и при окончании изменения будет помещаться в {@link ImageCompression#pixels}
+     */
     private short [][][] pixelsCopy;
+    /** Переменная, в которой будет храниться расширение изображения-родителя */
     private String extension;
-
+    /** Матрица-ядро преобразования (увеличение контраста) */
     private static short[][] convolutionMatrix = new short[3][3];
     static {
         /*
@@ -41,6 +52,15 @@ public class ImageCompression {
         convolutionMatrix[2][2] = (short) 0;
     }
 
+    /**
+     * Конструктор с загрузкой изображения
+     * @param fileName имя файла, который требуется загрузить
+     * @param isFromResources вид получения изображения <br/>
+     * <ul>
+     *      <li> true - изображение будет взято по имени из resouces.
+     *      <li> false - изображение будет взято по абсолютному пути.
+     * </ul>
+     */
     public ImageCompression(String fileName, boolean isFromResources){
         if (isFromResources)
             readeImageFromResources(fileName);
@@ -52,6 +72,9 @@ public class ImageCompression {
 
     }
 
+    /**
+     * Метод для инвертирования изображения целиком
+     */
     public void applyNegative(){
         final int width = image.getWidth();
         final int height = image.getHeight();
@@ -68,6 +91,9 @@ public class ImageCompression {
         refreshPixelsCopy();
     }
 
+    /**
+     * Метод для инвертирования части изображения
+     */
     public void applyNegative(int fromCol, int fromRow, int toCol, int toRow){
         final int pixelLength = pixels[0][0].length;
 
@@ -80,12 +106,24 @@ public class ImageCompression {
         }
     }
 
+    /**
+     * Метод многопоточного инвертирования изображения.
+     * Каждому потоку отдаётся своя часть изображения, которую он инвертирует и записывает в
+     * {@link ImageCompression#pixelsCopy}
+     * @param threadsNum количество потоков, используемые для инвертирования изображения
+     */
     public void applyNegativeMultithreading(int threadsNum) throws InterruptedException {
+        // пул потоков
         ExecutorService executorService = Executors.newFixedThreadPool(threadsNum);
+        // длинна куска изображения, который поступит в поток на обработку
         int widthDelta = image.getWidth() / threadsNum;
+        // остаток от деления длинны изображения на кол-во потоков
+        // (пиксели которые не попали ни к одному потоку,
+        // они пойдут на обработку последнему потоку)
         int unexpectedPixelRows = image.getWidth() % threadsNum;
         int height = image.getHeight();
 
+        // передача обязанностей потокам от 1-го до threadsNum - 1
         for (int i = 0; i < threadsNum - 1; i++) {
             executorService.submit(
                     new NegativeImageRunner(
@@ -96,7 +134,7 @@ public class ImageCompression {
                     )
             );
         }
-
+        // передача обязанности потоку с индексом threadsNum
         executorService.submit(
                 new NegativeImageRunner(
                         (threadsNum - 1) * widthDelta,
@@ -105,15 +143,21 @@ public class ImageCompression {
                         height
                 )
         );
-        // запуск потоков (fork)
+        // указываем, что потокам более задачи поступать не будут
         executorService.shutdown();
         // ожидание выполнения всех потоков (join)
         executorService.awaitTermination(1, TimeUnit.HOURS);
     }
 
+    /**
+     * Метода для свертки изображения с фильтром (повышение контраста) <br>
+     * Ядро преобразования:<br>
+     *  {@code 0 -1   0} <br>
+     *  {@code -1  5 -1} <br>
+     *  {@code 0 -1   0} <br>
+     */
     public void applyConvolutionMatrix(){
         int pixelLength = pixels[0][0].length;
-        // записываем пиксели изображения
         int width = this.image.getWidth();
         int height = this.image.getHeight();
 
@@ -155,7 +199,19 @@ public class ImageCompression {
 
         this.pixels = newPixels;
     }
-
+    /**
+     * Метода для свертки ЧАСТИ изображения с фильтром (повышение контраста) <br>
+     * Используется в многопоточной свёртке изображения {@link ImageCompression#applyConvolutionMatrixMultithreading}
+     * <br>
+     * Ядро преобразования:<br>
+     *  {@code 0 -1   0} <br>
+     *  {@code -1  5 -1} <br>
+     *  {@code 0 -1   0} <br>
+     * @param fromCol с какого столбца пикселей
+     * @param fromRow с какой строки пикселей
+     * @param toCol по какой столбец пикселей
+     * @param toRow по какую строку пикселей
+     */
     public void applyConvolutionMatrix(int fromCol, int fromRow, int toCol, int toRow){
         int pixelLength = pixels[0][0].length;
 
@@ -235,7 +291,13 @@ public class ImageCompression {
             noOffsetRow = 0;
         }
     }
-
+    /**
+     * Метод многопоточной свёртки изображения.
+     * Каждому потоку отдаётся своя часть изображения, которую он преобразует и записывает в
+     * {@link ImageCompression#pixelsCopy}
+     * @param threadsNum количество потоков, используемые для инвертирования изображения
+     * @see ImageCompression#applyConvolutionMatrix(int fromCol, int fromRow, int toCol, int toRow)
+     */
     public void applyConvolutionMatrixMultithreading(int threadsNum) throws InterruptedException {
         ExecutorService executorService = Executors.newFixedThreadPool(threadsNum);
         int widthDelta = image.getWidth() / threadsNum;
@@ -268,6 +330,17 @@ public class ImageCompression {
         setPixelsFromCopy();
     }
 
+    /**
+     * Метод конвертирования ЧАСТИ изображение в бинарное изображение,
+     * то есть значение пикселя либо {@code (255, 255, 255)}, либо {@code (0, 0, 0)}.
+     * Метод в основном использует в многопоточной конвертации изображения - <br>
+     * {@link ImageCompression#applyBinaryMultithreading(int threadNum, short threshold)}
+     *
+     * @param fromCol с какого столбца пикселей
+     * @param fromRow с какой строки пикселей
+     * @param toCol по какой столбец пикселей
+     * @param toRow по какую строку пикселей
+     */
     public void applyBinary(int fromCol, int fromRow, int toCol, int toRow, short threshold){
         final int pixelLength = pixels[0][0].length;
         short middleIntensity = 0;
@@ -292,7 +365,13 @@ public class ImageCompression {
             }
         }
     }
-
+    /**
+     * Метод многопоточного конвертирования изображение в бинарное изображение.
+     * Каждому потоку отдаётся своя часть изображения, которую он преобразует и записывает в
+     * {@link ImageCompression#pixelsCopy}
+     * @param threadsNum количество потоков, используемые для инвертирования изображения
+     * @see ImageCompression#applyBinary(int fromCol, int fromRow, int toCol, int toRow, short treshold)
+     */
     public void applyBinaryMultithreading(int threadsNum, short threshold) throws InterruptedException {
         ExecutorService executorService = Executors.newFixedThreadPool(threadsNum);
         int widthDelta = image.getWidth() / threadsNum;
@@ -327,6 +406,17 @@ public class ImageCompression {
         setPixelsFromCopy();
     }
 
+    /**
+     * Метод наращивания ЧАСТИ изображения.
+     * Используется после выполнения метода конвертации изображение в бинарное изображение <br>
+     * {@link ImageCompression#applyBinary(int fromCol, int fromRow, int toCol, int toRow, short threshold)}.
+     * Метод в основном используется в многопоточном наращивании: <br>
+     * {@link ImageCompression#applyDilationMultithreading(int threadNum)}
+     * @param fromCol с какого столбца пикселей
+     * @param fromRow с какой строки пикселей
+     * @param toCol по какой столбец пикселей
+     * @param toRow по какую строку пикселей
+     */
     public void applyDilation(int fromCol, int fromRow, int toCol, int toRow){
         final int pixelLength = pixels[0][0].length;
 
@@ -355,6 +445,14 @@ public class ImageCompression {
         }
     }
 
+    /**
+     * Метод многопоточного наращивания изображение, обычно выполняется после метода
+     * {@link ImageCompression#applyBinary} или {@link ImageCompression#applyBinaryMultithreading}.
+     * Каждому потоку отдаётся своя часть изображения, которую он преобразует и записывает в
+     * {@link ImageCompression#pixelsCopy}
+     * @param threadsNum количество потоков, используемые для инвертирования изображения
+     * @see ImageCompression#applyBinary(int fromCol, int fromRow, int toCol, int toRow, short treshold)
+     */
     public void applyDilationMultithreading(int threadsNum) throws InterruptedException {
         ExecutorService executorService = Executors.newFixedThreadPool(threadsNum);
         int widthDelta = image.getWidth() / threadsNum;
@@ -387,6 +485,9 @@ public class ImageCompression {
         setPixelsFromCopy();
     }
 
+    /**
+     * Метод перезаписи пикселей в буфере изображения
+     */
     public void writePixelsInImage(){
         int[] rasterFormatPixels = new int[image.getWidth() * image.getHeight() * pixels[0][0].length];
         WritableRaster raster = this.image.getRaster();
@@ -405,6 +506,10 @@ public class ImageCompression {
         image.setData(raster);
     }
 
+    /**
+     * Метод запись значений пикселей в локальный массив, с которым будут проводиться операции по конвертированию изображения.
+     * После выполнений всех необходимых конвертаций, значение пикселей будут записаны в буфер изображения
+     */
     private void loadImagePixels() {
         final int width = image.getWidth();
         final int height = image.getHeight();
@@ -432,6 +537,9 @@ public class ImageCompression {
         }
     }
 
+    /**
+     * Метода вывода значений пикселей в консоль
+     */
     public void printPixels(){
         int width = image.getWidth();
         int height = image.getHeight();
@@ -449,6 +557,10 @@ public class ImageCompression {
         }
     }
 
+    /**
+     * Метод для загрузки изображение из resources
+     * @param name имя файла, который требуется загрузить
+     */
     public void readeImageFromResources(String name) {
         ClassLoader classLoader = this.getClass().getClassLoader();
         try (InputStream io = classLoader.getResourceAsStream(name)){
@@ -462,7 +574,10 @@ public class ImageCompression {
             loadImagePixels();
         refreshPixelsCopy();
     }
-
+    /**
+     * Метод для загрузки изображение по абсолютному пути <br/>
+     * @param absoluteFilePath путь до файла, который требуется загрузить
+     */
     public void readImageFromAbsoluteFilePath(String absoluteFilePath){
         File file = new File(absoluteFilePath);
         try {
@@ -476,6 +591,9 @@ public class ImageCompression {
         refreshPixelsCopy();
     }
 
+    /**
+     * Метод для обновления копии пикселей изображения, обычно вызывается сразу после загрузки изображения.
+     */
     public void refreshPixelsCopy(){
         int pixelLength = this.pixels[0][0].length;
 
@@ -488,6 +606,12 @@ public class ImageCompression {
         }
     }
 
+    /**
+     * Метод для сохранения изображения. <br/>
+     * Сохраняет последнее изменение<br/>
+     *
+     * @param newFileName путь до файла, который требуется загрузить
+     */
     public void saveImage(String newFileName) throws IOException {
         ImageIO.write(image, this.extension, new File(newFileName + '.' + this.extension));
     }
@@ -512,6 +636,11 @@ public class ImageCompression {
         return pixels;
     }
 
+    /**
+     * Метод для обновления {@link ImageCompression#pixels}. Новые значения будут браться из {@link ImageCompression#pixelsCopy}.
+     * Метод обычно вызывается сразу после конвертации изображения, чтобы в {@link ImageCompression#pixels} хранилась актуальная информация
+     * об значении пикселей для будущих конвертаций или сохранения изображения.
+     */
     public void setPixelsFromCopy(){
         int pixelLength = pixels[0][0].length;
 
@@ -524,6 +653,10 @@ public class ImageCompression {
         }
     }
 
+    /**
+     * Класс-поток для перевода инвертирования части изображения.
+     * @see ImageCompression#applyNegativeMultithreading(int threadNum)
+     */
     private class NegativeImageRunner implements Runnable {
         private int fromCol;
         private int fromRow;
@@ -543,6 +676,10 @@ public class ImageCompression {
         }
     }
 
+    /**
+     * Класс-поток для свёртки части изображения.
+     * @see ImageCompression#applyNegativeMultithreading(int threadNum)
+     */
     private class ConvolutionMatrixImageRunner implements Runnable {
         private int fromCol;
         private int fromRow;
@@ -562,6 +699,10 @@ public class ImageCompression {
         }
     }
 
+    /**
+     * Класс-поток для конвертирования части изображения в бинарное изображения.
+     * @see ImageCompression#applyBinaryMultithreading(int threadNum, short trashold)
+     */
     private class BinaryImageRunner implements Runnable{
         private int fromRow;
         private int fromCol;
@@ -583,6 +724,10 @@ public class ImageCompression {
         }
     }
 
+    /**
+     * Класс-поток для наращивания части изображения.
+     * @see ImageCompression#applyDilationMultithreading(int threadNum)
+     */
     private class DilatationBinaryImageRunner implements Runnable{
         private int fromRow;
         private int fromCol;
