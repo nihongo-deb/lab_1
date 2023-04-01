@@ -5,35 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="632f854d-eaab-4bd5-afea-a2f4a91828c6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ManualTests/TestImageCompression.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_1_Threads_10240x7680.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_1_Threads_10240x7680.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_1_Threads_12800x9600.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_1_Threads_12800x9600.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_1_Threads_20480x15360.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_1_Threads_20480x15360.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_2_Threads_10240x7680.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_2_Threads_10240x7680.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_2_Threads_12800x9600.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_2_Threads_12800x9600.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_2_Threads_20480x15360.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_2_Threads_20480x15360.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_4_Threads_10240x7680.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_4_Threads_10240x7680.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_4_Threads_12800x9600.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_4_Threads_12800x9600.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_4_Threads_20480x15360.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_4_Threads_20480x15360.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_6_Threads_10240x7680.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_6_Threads_10240x7680.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_6_Threads_12800x9600.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_6_Threads_12800x9600.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_6_Threads_20480x15360.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_6_Threads_20480x15360.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_8_Threads_10240x7680.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_8_Threads_10240x7680.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_8_Threads_12800x9600.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_8_Threads_12800x9600.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_8_Threads_20480x15360.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_8_Threads_20480x15360.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_Aa_10_Threads_10240x7680.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_Aa_10_Threads_10240x7680.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_Aa_10_Threads_12800x9600.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_Aa_10_Threads_12800x9600.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_Aa_10_Threads_20480x15360.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_Aa_10_Threads_20480x15360.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_Aa_12_Threads_10240x7680.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_Aa_12_Threads_10240x7680.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_Aa_12_Threads_12800x9600.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_Aa_12_Threads_12800x9600.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_Aa_12_Threads_20480x15360.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_Aa_12_Threads_20480x15360.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_Aa_14_Threads_10240x7680.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_Aa_14_Threads_10240x7680.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_Aa_14_Threads_12800x9600.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_Aa_14_Threads_12800x9600.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_Aa_14_Threads_20480x15360.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_Aa_14_Threads_20480x15360.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_Aa_16_Threads_10240x7680.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_Aa_16_Threads_10240x7680.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_Aa_16_Threads_12800x9600.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_Aa_16_Threads_12800x9600.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_Aa_16_Threads_20480x15360.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_Aa_16_Threads_20480x15360.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_1_Threads_10240x7680.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_1_Threads_12800x9600.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_1_Threads_20480x15360.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_2_Threads_10240x7680.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_2_Threads_12800x9600.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/App_A_2_Threads_20480x15360.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ImageCompression.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ImageCompression.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ManualTests/TestImageCompression.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ManualTests/TestImageCompression.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,7 +101,7 @@
       <command value="mvn clean install" />
     </option>
   </component>
-  <component name="RunManager" selected="Application.TestImageCompression">
+  <component name="RunManager" selected="Application.Benchmark">
     <configuration name="Benchmark" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.nihongo_deb.Benchmark" />
       <module name="lab_1" />
@@ -190,8 +170,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.TestImageCompression" />
         <item itemvalue="Application.Benchmark" />
+        <item itemvalue="Application.TestImageCompression" />
         <item itemvalue="Application.TestCSV" />
         <item itemvalue="Application.TestDraw" />
         <item itemvalue="Application.Edutest" />
@@ -284,7 +264,7 @@
       <workItem from="1680278072949" duration="5960000" />
       <workItem from="1680343463286" duration="4129000" />
       <workItem from="1680347706286" duration="170000" />
-      <workItem from="1680348005228" duration="9254000" />
+      <workItem from="1680348005228" duration="10163000" />
     </task>
     <servers />
   </component>

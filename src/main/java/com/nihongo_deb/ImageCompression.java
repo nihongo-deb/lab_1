@@ -24,11 +24,11 @@ public class ImageCompression {
      * Текущие пиксели изображения.
      * Для избежания состояния-гонки, из этого массива данные копируются и помещаются в {@link ImageCompression#pixelsCopy}
      */
-    private volatile short [][][] pixels;
+    private volatile char [][][] pixels;
     /**
      * Слепок пикселей изображения, который будет изменяться и при окончании изменения будет помещаться в {@link ImageCompression#pixels}
      */
-    private short [][][] pixelsCopy;
+    private char [][][] pixelsCopy;
     /** Переменная, в которой будет храниться расширение изображения-родителя */
     private String extension;
     /** Матрица-ядро преобразования (увеличение контраста) */
@@ -83,7 +83,7 @@ public class ImageCompression {
         for (int row = 0; row < height; row++){
             for (int col = 0; col < width; col++){
                 for (int channel = 0; channel < pixelLength; channel++){
-                    pixels[col][row][channel] = (short) (255 - pixels[col][row][channel]);
+                    pixels[col][row][channel] = (char) (255 - pixels[col][row][channel]);
                 }
             }
         }
@@ -100,7 +100,7 @@ public class ImageCompression {
         for (int col = fromCol; col < toCol; col++){
             for (int row = fromRow; row < toRow; row++){
                 for (int channel = 0; channel < pixelLength; channel++){
-                    pixels[col][row][channel] = (short) (255 - pixels[col][row][channel]);
+                    pixels[col][row][channel] = (char) (255 - pixels[col][row][channel]);
                 }
             }
         }
@@ -161,12 +161,12 @@ public class ImageCompression {
         int width = this.image.getWidth();
         int height = this.image.getHeight();
 
-        short[][][] newPixels = new short[width][height][pixelLength];
+        char[][][] newPixels = new char[width][height][pixelLength];
 
         // пробегаемся по пикселям нового изображения учитывая обрезку в 1 пиксель по краям
         for (int y = 1; y < height - 2; y++){
             for (int x = 1; x < width - 2; x++){
-                short[][][] partParentPixels = new short[3][3][pixelLength]; //[ширина][высота][RGB]
+                char[][][] partParentPixels = new char[3][3][pixelLength]; //[ширина][высота][RGB]
                 // копируем значения пикселей в массив partParentPixels
                 // px/y - parent x/y
                 for (int py = 0; py < 3; py++){
@@ -175,9 +175,9 @@ public class ImageCompression {
                     }
                 }
                 //будущий сконвертированный пиксель
-                short[] convertedPixel = new short[pixelLength];
+                char[] convertedPixel = new char[pixelLength];
                 // сумма перемножений матрицы(ядра) и куска родительского изображения
-                short multiplySum = 0;
+                char multiplySum = 0;
                 for (int channel = 0; channel < pixelLength; channel++){
                     for (int hMatrix = 0; hMatrix < convolutionMatrix.length; hMatrix++){
                         for (int wMatrix = 0; wMatrix < convolutionMatrix.length; wMatrix++){
@@ -186,7 +186,7 @@ public class ImageCompression {
                     }
                     // присваиваем значение R, G или B в новый пиксель
                     //TODO 01.02.2023 переписать логику присвоение максимального значения
-                    if (multiplySum <= (short) 255)
+                    if (multiplySum <= (char) 255)
                         convertedPixel[channel] = multiplySum;
                     else
                         convertedPixel[channel] = (short) 255;
@@ -215,7 +215,7 @@ public class ImageCompression {
     public void applyConvolutionMatrix(int fromCol, int fromRow, int toCol, int toRow){
         int pixelLength = pixels[0][0].length;
 
-        short[][][] newPixels = new short[toCol - fromCol][toRow - fromRow][pixelLength];
+        char[][][] newPixels = new char[toCol - fromCol][toRow - fromRow][pixelLength];
 
         int noOffsetCol = 0;
         int noOffsetRow = 0;
@@ -233,7 +233,7 @@ public class ImageCompression {
                 if (y == image.getHeight() - 1)
                     break;
 
-                short[][][] partParentPixels = new short[3][3][pixelLength]; //[ширина][высота][RGB]
+                char[][][] partParentPixels = new char[3][3][pixelLength]; //[ширина][высота][RGB]
                 // копируем значения пикселей в массив partParentPixels
                 // px/y - parent x/y
 
@@ -243,9 +243,9 @@ public class ImageCompression {
                     }
                 }
                 //будущий сконвертированный пиксель
-                short[] convertedPixel = new short[pixelLength];
+                char[] convertedPixel = new char[pixelLength];
                 // сумма перемножений матрицы(ядра) и куска родительского изображения
-                short multiplySum = 0;
+                char multiplySum = 0;
                 for (int channel = 0; channel < pixelLength; channel++){
                     for (int hMatrix = 0; hMatrix < convolutionMatrix.length; hMatrix++){
                         for (int wMatrix = 0; wMatrix < convolutionMatrix.length; wMatrix++){
@@ -254,10 +254,10 @@ public class ImageCompression {
                     }
                     // присваиваем значение R, G или B в новый пиксель
                     //TODO 01.02.2023 переписать логику присвоение максимального значения
-                    if (multiplySum <= (short) 255)
+                    if (multiplySum <= (char) 255)
                         convertedPixel[channel] = multiplySum;
                     else
-                        convertedPixel[channel] = (short) 255;
+                        convertedPixel[channel] = (char) 255;
                     multiplySum = (short) 0;
                 }
                 // сохраняем пиксель в WritableRaster нового изображения
@@ -344,7 +344,7 @@ public class ImageCompression {
     public void applyBinary(int fromCol, int fromRow, int toCol, int toRow, short threshold){
         final int pixelLength = pixels[0][0].length;
         short middleIntensity = 0;
-        short channelValue;
+        char channelValue;
 
         for (int col = fromCol; col < toCol; col++){
             for (int row = fromRow; row < toRow; row++){
@@ -522,7 +522,7 @@ public class ImageCompression {
         else
             pixelLength = 3;
 
-        this.pixels = new short[width][height][pixelLength];
+        this.pixels = new char[width][height][pixelLength];
         unifiedPixels = image.getRaster().getPixels(0,0,width,height, new int[width * height * pixelLength]);
         for (int pixel = 0, row = 0, col = 0; pixel < unifiedPixels.length; pixel++){
             if (pixel > 1 && (pixel % pixelLength == 0))
@@ -533,7 +533,7 @@ public class ImageCompression {
                 row++;
             }
 
-            this.pixels[col][row][pixel % pixelLength] = (short) unifiedPixels[pixel];
+            this.pixels[col][row][pixel % pixelLength] = (char) unifiedPixels[pixel];
         }
     }
 
@@ -597,7 +597,7 @@ public class ImageCompression {
     public void refreshPixelsCopy(){
         int pixelLength = this.pixels[0][0].length;
 
-        this.pixelsCopy = new short[this.image.getWidth()][this.image.getHeight()][pixelLength];
+        this.pixelsCopy = new char[this.image.getWidth()][this.image.getHeight()][pixelLength];
 
         for (int col = 0; col < this.image.getWidth(); col++){
             for (int row = 0; row < this.image.getHeight(); row++){
@@ -632,7 +632,7 @@ public class ImageCompression {
         return image;
     }
 
-    public short[][][] getPixels() {
+    public char[][][] getPixels() {
         return pixels;
     }
 

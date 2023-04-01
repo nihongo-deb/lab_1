@@ -11,7 +11,10 @@ import java.io.IOException;
  */
 public class TestImageCompression {
     public static void main(String[] args) throws InterruptedException, IOException {
-        char a = 11;
-        System.out.println((int) a);
+        ImageCompression imageCompression = new ImageCompression("gervant.jpg", true);
+        imageCompression.applyNegativeMultithreading(4);
+        imageCompression.setPixelsFromCopy();
+        imageCompression.writePixelsInImage();
+        imageCompression.saveImage("char is god");
     }
 }
