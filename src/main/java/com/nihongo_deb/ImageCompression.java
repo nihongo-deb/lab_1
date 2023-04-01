@@ -24,7 +24,7 @@ public class ImageCompression {
      * Текущие пиксели изображения.
      * Для избежания состояния-гонки, из этого массива данные копируются и помещаются в {@link ImageCompression#pixelsCopy}
      */
-    private volatile char [][][] pixels;
+    private char [][][] pixels;
     /**
      * Слепок пикселей изображения, который будет изменяться и при окончании изменения будет помещаться в {@link ImageCompression#pixels}
      */
@@ -601,10 +601,12 @@ public class ImageCompression {
 
         for (int col = 0; col < this.image.getWidth(); col++){
             for (int row = 0; row < this.image.getHeight(); row++){
-                this.pixelsCopy[col][row] = this.pixels[col][row].clone();
+                for (int RGBIndex = 0; RGBIndex < pixelLength; RGBIndex++)
+                    this.pixelsCopy[col][row][RGBIndex] = this.pixels[col][row][RGBIndex];
+                }
             }
         }
-    }
+
 
     /**
      * Метод для сохранения изображения. <br/>
