@@ -2,6 +2,7 @@ package com.nihongo_deb;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
@@ -65,7 +66,6 @@ public class ImageCompression {
         if (isFromResources)
             readeImageFromResources(fileName);
         else readImageFromAbsoluteFilePath(fileName);
-        loadImagePixels();
     }
 
     public ImageCompression() {
@@ -513,7 +513,7 @@ public class ImageCompression {
     private void loadImagePixels() {
         final int width = image.getWidth();
         final int height = image.getHeight();
-        int[] unifiedPixels;
+        byte[] unifiedPixels = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
         final boolean hasAlphaChannel = image.getAlphaRaster() != null;
         int pixelLength;
 
@@ -521,19 +521,17 @@ public class ImageCompression {
             pixelLength = 4;
         else
             pixelLength = 3;
-
+        System.out.println(hasAlphaChannel);
         this.pixels = new char[width][height][pixelLength];
-        unifiedPixels = image.getRaster().getPixels(0,0,width,height, new int[width * height * pixelLength]);
-        for (int pixel = 0, row = 0, col = 0; pixel < unifiedPixels.length; pixel++){
-            if (pixel > 1 && (pixel % pixelLength == 0))
-                col++;
 
-            if (col == width){
+        for (int pixel = 0, row = 0, col = 0; pixel + 3 < unifiedPixels.length; pixel++){
+            this.pixels[col][row][pixel % pixelLength] = (char)(unifiedPixels[pixel] & 0xff);
+            if (pixel != 0 && pixel % 3 == 0)
+                col++;
+            if (col == width) {
                 col = 0;
                 row++;
             }
-
-            this.pixels[col][row][pixel % pixelLength] = (char) unifiedPixels[pixel];
         }
     }
 
