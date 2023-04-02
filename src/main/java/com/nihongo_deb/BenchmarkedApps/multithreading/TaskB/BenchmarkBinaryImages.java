@@ -9,19 +9,25 @@ import com.nihongo_deb.ImageCompression;
  */
 public class BenchmarkBinaryImages {
     public static void main(String[] args) throws InterruptedException {
+        //имена файлов, над которыми будут проводиться тесты
         String fileName10240_7680 = "gervant_10240x7680.jpg";
         String fileName12800_9600 = "gervant_12800x9600.jpg";
         String fileName20480_15360 = "gervant_20480x15360.jpg";
 
+        //массив кол-ва потоков
         int[] numThreads = new int[]{1, 2, 4, 6, 8, 10, 12, 14, 16};
+        //кол-во замерных итераций
         int numIterations = 3;
+        //массив имён файлов
         String[] imagesName = new String[]{fileName10240_7680, fileName12800_9600, fileName20480_15360};
 
+        //объект, который будет в роли подопытного
+        //герой 8)
         ImageCompression image;
         long before;
         long after;
         System.out.println("<< Task-B Benchmark >>\n");
-        StringBuilder consoleMessage = new StringBuilder();
+        StringBuilder consoleMessage = new StringBuilder(); //билдер строк
         for (int imageIndex = 0; imageIndex < imagesName.length; imageIndex++) {
             image = new ImageCompression(imagesName[imageIndex], true);
             System.out.println("Image " + imagesName[imageIndex] + " loaded");

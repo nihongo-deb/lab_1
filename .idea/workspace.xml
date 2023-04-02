@@ -5,10 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="632f854d-eaab-4bd5-afea-a2f4a91828c6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskB/BenchmarkBinaryImages.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskC/BenchmarkKMeansCluster.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/KMeansCluster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/KMeansCluster.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/BenchmarkImages.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/BenchmarkImages.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskB/BenchmarkBinaryImages.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskB/BenchmarkBinaryImages.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskC/BenchmarkKMeansCluster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskC/BenchmarkKMeansCluster.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ManualTests/TestImageCompression.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ManualTests/TestImageCompression.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -170,10 +171,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.BenchmarkKMeansCluster" />
+        <item itemvalue="Application.TestImageCompression" />
         <item itemvalue="Application.BenchmarkImages" />
         <item itemvalue="Application.ManualTest" />
         <item itemvalue="Application.Benchmark" />
-        <item itemvalue="Application.TestImageCompression" />
       </list>
     </recent_temporary>
   </component>
@@ -266,7 +267,8 @@
       <workItem from="1680348005228" duration="10163000" />
       <workItem from="1680363108558" duration="11310000" />
       <workItem from="1680415628372" duration="1378000" />
-      <workItem from="1680420879485" duration="5399000" />
+      <workItem from="1680420879485" duration="10628000" />
+      <workItem from="1680436901112" duration="5270000" />
     </task>
     <servers />
   </component>
