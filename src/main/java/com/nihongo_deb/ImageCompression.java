@@ -1,6 +1,7 @@
 package com.nihongo_deb;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.awt.image.WritableRaster;
@@ -489,21 +490,21 @@ public class ImageCompression {
      * Метод перезаписи пикселей в буфере изображения
      */
     public void writePixelsInImage(){
-        int[] rasterFormatPixels = new int[image.getWidth() * image.getHeight() * pixels[0][0].length];
-        WritableRaster raster = this.image.getRaster();
+//        int[] rasterFormatPixels = new int[image.getWidth() * image.getHeight() * pixels[0][0].length];
+//        WritableRaster raster = this.image.getRaster();
 
-        int pixelIndex = 0;
-        for (int row = 0; row < image.getHeight(); row++){
-            for (int col = 0; col < image.getWidth(); col++){
-                for (int channel = 0; channel < pixels[0][0].length; channel++){
-                    rasterFormatPixels[pixelIndex] = pixels[col][row][channel];
-                    pixelIndex++;
-                }
+//        int pixelIndex = 0;
+        int argb = 0;
+        for (int col = 0; col < image.getHeight(); col++){
+            for (int row = 0; row < image.getWidth(); row++){
+//                argb = 255 << 24 + (int)pixels[row][col][0] << 16 + (int)pixels[row][col][1] << 8 + (int)pixels[row][col][2];
+
+                image.setRGB(row, col, new Color((int)pixels[row][col][0], (int)pixels[row][col][1], (int)pixels[row][col][2]).getRGB());
             }
         }
 
-        raster.setPixels(0,0, image.getWidth(), image.getHeight(), rasterFormatPixels);
-        image.setData(raster);
+//        raster.setPixels(0,0, image.getWidth(), image.getHeight(), rasterFormatPixels);
+//        image.setData(raster);
     }
 
     /**
@@ -521,7 +522,7 @@ public class ImageCompression {
             pixelLength = 4;
         else
             pixelLength = 3;
-        System.out.println(hasAlphaChannel);
+//        System.out.println(hasAlphaChannel);
         this.pixels = new char[width][height][pixelLength];
 
         for (int pixel = 0, row = 0, col = 0; pixel + 3 < unifiedPixels.length; pixel++){
@@ -595,6 +596,7 @@ public class ImageCompression {
     public void refreshPixelsCopy(){
         int pixelLength = this.pixels[0][0].length;
 
+        this.pixelsCopy = null;
         this.pixelsCopy = new char[this.image.getWidth()][this.image.getHeight()][pixelLength];
 
         for (int col = 0; col < this.image.getWidth(); col++){
