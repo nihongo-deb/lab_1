@@ -14,8 +14,8 @@ public class BenchmarkImages {
         String fileName20480_15360 = "gervant_20480x15360.jpg";
 
         ImageCompression image_10240_7680 = new ImageCompression(fileName10240_7680, true);
-//        ImageCompression image_12800_9600 = new ImageCompression(fileName12800_9600, true);
-//        ImageCompression image_20480_15360 = new ImageCompression(fileName20480_15360, true);
+        ImageCompression image_12800_9600 = new ImageCompression(fileName12800_9600, true);
+        ImageCompression image_20480_15360 = new ImageCompression(fileName20480_15360, true);
 
         int[] numThreads = new int[]{1, 2, 4, 6, 8, 10, 12, 14, 16};
         int numIterations = 3;

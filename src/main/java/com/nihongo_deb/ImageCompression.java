@@ -490,21 +490,12 @@ public class ImageCompression {
      * Метод перезаписи пикселей в буфере изображения
      */
     public void writePixelsInImage(){
-//        int[] rasterFormatPixels = new int[image.getWidth() * image.getHeight() * pixels[0][0].length];
-//        WritableRaster raster = this.image.getRaster();
-
-//        int pixelIndex = 0;
         int argb = 0;
         for (int col = 0; col < image.getHeight(); col++){
             for (int row = 0; row < image.getWidth(); row++){
-//                argb = 255 << 24 + (int)pixels[row][col][0] << 16 + (int)pixels[row][col][1] << 8 + (int)pixels[row][col][2];
-
-                image.setRGB(row, col, new Color((int)pixels[row][col][0], (int)pixels[row][col][1], (int)pixels[row][col][2]).getRGB());
+                image.setRGB(row, col, new Color(pixels[row][col][0], pixels[row][col][1], pixels[row][col][2]).getRGB());
             }
         }
-
-//        raster.setPixels(0,0, image.getWidth(), image.getHeight(), rasterFormatPixels);
-//        image.setData(raster);
     }
 
     /**
@@ -525,10 +516,12 @@ public class ImageCompression {
 //        System.out.println(hasAlphaChannel);
         this.pixels = new char[width][height][pixelLength];
 
-        for (int pixel = 0, row = 0, col = 0; pixel + 3 < unifiedPixels.length; pixel++){
-            this.pixels[col][row][pixel % pixelLength] = (char)(unifiedPixels[pixel] & 0xff);
-            if (pixel != 0 && pixel % 3 == 0)
-                col++;
+        for (int pixel = 0, row = 0, col = 0; pixel + 3 < unifiedPixels.length; pixel+= pixelLength){
+            this.pixels[col][row][2] = (char)(unifiedPixels[pixel] & 0xff);
+            this.pixels[col][row][1] = (char)(unifiedPixels[pixel + 1] & 0xff);
+            this.pixels[col][row][0] = (char)(unifiedPixels[pixel + 2] & 0xff);
+
+            col++;
             if (col == width) {
                 col = 0;
                 row++;
