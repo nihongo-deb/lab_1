@@ -248,12 +248,12 @@ public class KMeansCluster {
         for (int threadIndex = 0; threadIndex < threadNum; threadIndex++){
             executorService.submit(new CSIndexRunner(threadNum, threadIndex, partsOfNumerator, startLatch, endLatch));
             if (threadIndex == threadNum - 1){
-                before = System.currentTimeMillis();
+                before = System.nanoTime();
             }
         }
 
         endLatch.await(); // ожидание исполнения всех потоков в мастер-потоке
-        long after = System.currentTimeMillis();
+        long after = System.nanoTime();
 
         executorService.shutdown();
         executorService.awaitTermination(1, TimeUnit.HOURS);

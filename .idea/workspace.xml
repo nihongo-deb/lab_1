@@ -5,13 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="632f854d-eaab-4bd5-afea-a2f4a91828c6" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskB/BenchmarkBinaryImages.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskC/BenchmarkKMeansCluster.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pizdec.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/pizdec.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/BenchmarkImages.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/BenchmarkedApps/multithreading/TaskA/BenchmarkImages.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ManualTests/ManualTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/ManualTests/ManualTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/gervant_10240x7680.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/gervant_10240x7680.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/gervant_12800x9600.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/gervant_12800x9600.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/gervant_20480x15360.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/gervant_20480x15360.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/KMeansCluster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nihongo_deb/KMeans/KMeansCluster.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,6 +86,7 @@
       <recent name="" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.nihongo_deb.BenchmarkedApps.multithreading.TaskB" />
       <recent name="com.nihongo_deb.BenchmarkedApps.multithreading.TaskA" />
       <recent name="com.nihongo_deb.BenchmarkedApps.multithreading" />
       <recent name="com.nihongo_deb.ManualTests" />
@@ -99,7 +97,7 @@
       <command value="mvn clean install" />
     </option>
   </component>
-  <component name="RunManager" selected="Application.BenchmarkImages">
+  <component name="RunManager" selected="Application.BenchmarkKMeansCluster">
     <configuration name="Benchmark" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.nihongo_deb.Benchmark" />
       <module name="lab_1" />
@@ -122,13 +120,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ManualTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.nihongo_deb.ManualTests.ManualTest" />
+    <configuration name="BenchmarkKMeansCluster" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.nihongo_deb.BenchmarkedApps.multithreading.TaskC.BenchmarkKMeansCluster" />
       <module name="lab_1" />
-      <option name="VM_PARAMETERS" value="-Xmx16G" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.nihongo_deb.ManualTests.*" />
+          <option name="PATTERN" value="com.nihongo_deb.BenchmarkedApps.multithreading.TaskC.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -136,9 +133,10 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestCSV" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.nihongo_deb.ManualTests.TestCSV" />
+    <configuration name="ManualTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.nihongo_deb.ManualTests.ManualTest" />
       <module name="lab_1" />
+      <option name="VM_PARAMETERS" value="-Xmx16G" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.nihongo_deb.ManualTests.*" />
@@ -163,19 +161,19 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Application.BenchmarkKMeansCluster" />
       <item itemvalue="Application.BenchmarkImages" />
       <item itemvalue="Application.ManualTest" />
       <item itemvalue="Application.Benchmark" />
       <item itemvalue="Application.TestImageCompression" />
-      <item itemvalue="Application.TestCSV" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.BenchmarkKMeansCluster" />
         <item itemvalue="Application.BenchmarkImages" />
         <item itemvalue="Application.ManualTest" />
         <item itemvalue="Application.Benchmark" />
         <item itemvalue="Application.TestImageCompression" />
-        <item itemvalue="Application.TestCSV" />
       </list>
     </recent_temporary>
   </component>
@@ -268,7 +266,7 @@
       <workItem from="1680348005228" duration="10163000" />
       <workItem from="1680363108558" duration="11310000" />
       <workItem from="1680415628372" duration="1378000" />
-      <workItem from="1680420879485" duration="3186000" />
+      <workItem from="1680420879485" duration="5399000" />
     </task>
     <servers />
   </component>
