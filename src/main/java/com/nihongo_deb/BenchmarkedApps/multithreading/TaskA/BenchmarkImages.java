@@ -13,38 +13,49 @@ public class BenchmarkImages {
         String fileName12800_9600 = "gervant_12800x9600.jpg";
         String fileName20480_15360 = "gervant_20480x15360.jpg";
 
-        ImageCompression image_10240_7680 = new ImageCompression(fileName10240_7680, true);
-        ImageCompression image_12800_9600 = new ImageCompression(fileName12800_9600, true);
-        ImageCompression image_20480_15360 = new ImageCompression(fileName20480_15360, true);
-
         int[] numThreads = new int[]{1, 2, 4, 6, 8, 10, 12, 14, 16};
         int numIterations = 3;
-        String[] fileNames = new String[]{fileName10240_7680, fileName12800_9600, fileName20480_15360};
-        ImageCompression[] images = new ImageCompression[]{image_10240_7680};
+        String[] imagesName = new String[]{fileName10240_7680, fileName12800_9600, fileName20480_15360};
 
+        ImageCompression image;
+        long before;
+        long after;
         System.out.println("<< Task-A Benchmark >>\n");
         StringBuilder consoleMessage = new StringBuilder();
-        for (int imageIndex = 0; imageIndex < images.length; imageIndex++) {
+        for (int imageIndex = 0; imageIndex < imagesName.length; imageIndex++) {
+            image = new ImageCompression(imagesName[imageIndex], true);
+            System.out.println("Image " + imagesName[imageIndex] + " loaded");
+            System.out.println("#########################");
+
             for (int threads : numThreads) {
-                for (int warmupIndex = 0; warmupIndex < 5; warmupIndex++) {
-                    images[imageIndex].applyNegativeMultithreading(threads);
-                    images[imageIndex].applyConvolutionMatrixMultithreading(threads);
+                System.out.println("Start warmup");
+                before = System.currentTimeMillis();
+                for (int warmupIndex = 0; warmupIndex < 5; warmupIndex++) { // разогрев тачки
+                    image.applyNegativeMultithreading(threads);
+                    image.applyConvolutionMatrixMultithreading(threads);
                 }
+                after = System.currentTimeMillis();
+                System.out.println("End warmup\n" +
+                        "Average Elapse-time: " + (long)((after - before) / 5));
 
-                long before = System.currentTimeMillis();
-                for(int iteration = 0; iteration < numIterations; iteration++){
-                    images[imageIndex].applyNegativeMultithreading(threads);
-                    images[imageIndex].applyConvolutionMatrixMultithreading(threads);
+                System.out.println("--");
+
+                System.out.println("Measurement starts");
+                before = System.currentTimeMillis();
+                for(int iteration = 0; iteration < numIterations; iteration++){ // замер
+                    image.applyNegativeMultithreading(threads);
+                    image.applyConvolutionMatrixMultithreading(threads);
                 }
-                long after = System.currentTimeMillis();
-
-                consoleMessage.append("Elapse time: ").append((int)(after - before)/numIterations).append("ms\n");
-                consoleMessage.append("Image:" ).append(fileNames[imageIndex]).append('\n');
-                consoleMessage.append("Threads: ").append(threads).append('\n');
+                System.out.println("Measurement ends");
+                after = System.currentTimeMillis();
+                // принт в консоль
+                consoleMessage.append("Average Elapse-time: ").append((int)(after - before)/numIterations).append("ms\n");
+                consoleMessage.append("Image:" ).append(imagesName[imageIndex]).append('\n');
+                consoleMessage.append("Threads: ").append(threads).append('\n').append('\n');
                 System.out.println(consoleMessage);
-            }
 
-            images[imageIndex] = null;
+                System.out.println("#########################");
+            }
         }
 
     }
